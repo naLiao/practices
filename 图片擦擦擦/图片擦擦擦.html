@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div{
+				margin: 0;
+				padding: 0;
+			}
+			html,body{
+				width: 100%;
+				height: 100%;
+			}
+			.container{
+				width: 100%;
+				height: 100%;
+				/*display: flex;    /*弹性布局*/
+				/*flex-wrap: wrap;  /*自动换行*/
+				overflow: hidden;
+				position: absolute;
+			}
+			.container div{
+				width: 10%;  /*  10vw屏幕宽度分成100份，每一份就是一个vw*/
+				height: 10%;  /*  10vh屏幕高度分成100份，每一份就是一个vw*/
+				opacity: 0.5;
+				border: solid 1px #FFF;
+				box-sizing: border-box;
+				position: absolute;
+				transition: 300ms ease-in-out;
+				background: url(img/timg.jpg);
+				background-size:1000% 1000%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container"></div>
+	</body>
+	<script>
+		var container = document.querySelector(".container");
+		var aDvi = container.getElementsByTagName("div");
+		var str = '';
+		
+		//生成100个div
+		for( var i=0;i<10;i++ ){
+			for(var j=0;j<10;j++){
+				str += `<div style="top:${i*10}%; left:${j*10}%; background-position:-${j*100}% -${i*100}%;"></div>`;
+			}
+		}
+		container.innerHTML = str;
+		//添加样式
+		for(var i=0;i<aDvi.length;i++){
+			aDvi[i].onmouseover = function(){
+				this.style.transform = 'scale(1.2)';
+				this.style.opacity = '1';
+			};
+			
+			aDvi[i].onmouseout = function(){
+				this.style.transform = '';
+			};
+		}
+		
+		
+	</script>
+</html>
