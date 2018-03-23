@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			/*:focus{
+				outline: 0;
+			}*/
+			li{
+				list-style: none;
+			}
+			body{
+				background: #000;
+			}
+			.main{
+				width: 700px;
+				height: 380px;
+				margin: 0 auto;
+				margin-top: 6%;
+				background: url(img/bg.png) no-repeat center center;
+				padding-top: 80px;
+			}
+			.container{
+				width: 500px;
+				height: 300px;
+				background: #FFF;
+				box-sizing: border-box;
+				border-radius: 6px;
+				box-shadow:1px 1px 3px #E27089;
+				margin-left: 100px;
+				padding-top: 15px;
+				position: relative;
+			}
+			.songsLists{
+				width: 100%;
+				height: 220px;
+			}
+			.bottom{
+				width: 100%;
+				height: 50px;
+				background: #DE4A63;
+				position: absolute;
+				bottom: 0;
+				border-bottom-left-radius: 6px;
+				border-bottom-right-radius: 6px;
+			}
+			#selectAll, #collect, #add, #delete{
+				position: absolute;
+				top: 0;
+			}
+			#selectAll button, #collect button, #add button, #delete button{
+				border: none;
+				background: none;
+				color: #FFF;
+				font-size: 14px;
+				line-height: 50px;
+				outline: none;
+			}
+			#selectAll div{
+				width: 12px;
+				height: 12px;
+				line-height: 12px;
+				color: #FFF;
+				border: solid 1px #DDD;
+				position: absolute;
+				top: 18px;
+				left: 0px;
+			}
+			#collect div{
+				width: 24px;
+				height: 21px;
+				background: url(img/1.png);
+				background-position: 0 0;
+				position: absolute;
+				top: 15px;
+				left: -36px;
+			}
+			#add div{
+				width: 24px;
+				height: 24px;
+				background: url(img/1.png);
+				background-position: 0px -21px;
+				position: absolute;
+				top: 14px;
+				left: -36px;
+			}
+			#delete div{
+				width: 24px;
+				height: 24px;
+				background: url(img/1.png);
+				background-position: 0px -45px;
+				position: absolute;
+				top: 14px;
+				left: -36px;
+			}
+			#selectAll{
+				width: 30px;
+				left: 30px;
+				padding-left: 30px;
+				position: relative;
+			}
+			#collect{
+				left: 180px;
+			}
+			#add{
+				left: 300px;
+			}
+			#delete{
+				left: 420px;
+			}
+			.songsLists li{
+				height: 36px;
+				cursor: pointer;
+			}
+			.songsLists li.even{
+				background: #F7C5C1;
+			}
+			.songsLists li.hover{
+				background: #E76A81;
+			}
+			.songsLists li.checked{
+				background: #E76A81;
+			}
+			.songsLists li.checked div::after{
+				content: "✔";
+			}
+			#selectAll.checked div::after{
+				content: "✔";
+			}
+			.songsLists li div{
+				width: 12px;
+				height: 12px;
+				line-height: 12px;
+				border: solid 1px #DDD;
+				float: left;
+				margin-top: 12px;
+				margin-left: 30px;
+				font: 14/12px arial;
+				color: #FFF;
+			}
+			.songsLists span{
+				line-height: 36px;
+				font-size: 14px;
+				color: #111;
+				display: inline-block;
+				width: 300px;
+				margin-left: 20px;
+			}
+			.songsLists span:nth-of-type(2){
+				width: 110px;
+				margin-left: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<div class="container">
+				<ul class="songsLists">
+					<li>
+						<div></div>
+						<span>泡沫</span>
+						<span>邓紫棋</span>
+					</li>
+					<li>
+						<div></div>
+						<span>说爱你</span>
+						<span>蔡依林</span>
+					</li>
+					<li>
+						<div></div>
+						<span>稻香</span>
+						<span>周杰伦</span>
+					</li>
+					<li>
+						<div></div>
+						<span>我的梦</span>
+						<span>张靓颖</span>
+					</li>
+					<li>
+						<div></div>
+						<span>怎么说我不爱你</span>
+						<span>萧敬腾</span>
+					</li>
+					<li>
+						<div></div>
+						<span>无处安放</span>
+						<span>白若溪</span>
+					</li>
+				</ul>
+				<div class="bottom">
+					<div id="selectAll">
+						<div></div>
+						<button>全选</button>
+					</div>
+					<div id="collect">
+						<div></div>
+						<button>收藏</button>
+					</div>
+					<div id="add">
+						<div></div>
+						<button>添加</button>
+					</div>
+					<div id="delete">
+						<div></div>
+						<button>删除</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var aLi = document.querySelectorAll(".songsLists li");
+		var selectAll = document.getElementById('selectAll');
+		var len = aLi.length;
+		var num = 0;
+		
+		for(var i=0;i<len;i++){
+			if(i%2) aLi[i].classList.add('even');
+			
+			aLi[i].onmouseover = function(){
+				this.classList.add('hover');
+			};
+			aLi[i].onmouseout = function(){
+				this.classList.remove('hover');
+			};
+			aLi[i].onclick = function(){
+				var ret = this.classList.toggle('checked');
+				num = ret ? ++num : --num;
+				console.log(num);
+				selectAll.classList.toggle('checked', num == len);
+			};
+		}
+		
+		selectAll.onclick = function(){
+			var ret = this.classList.toggle('checked');
+			num = ret ? aLi.length : 0;
+			for(var i=0;i<aLi.length;i++){
+				aLi[i].classList.toggle('checked',ret)
+			}
+		};
+	</script>
+</html>
