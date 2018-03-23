@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,h2,ul,li{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			.container{
+				width: 320px;
+				height: 600px;
+				margin: 0 auto;
+				box-sizing: border-box;
+				background: #00BFFF;
+				border-radius: 6px;
+				padding: 40px 20px;
+				border: solid 2px #000;
+			}
+			.list{
+				
+			}
+			.list h2{
+				font-size: 18px;
+				line-height: 40px;
+			}
+			.list h2.selected{
+				color: #FFF;
+				background: rgba(89,38,33,.4);
+			}
+			.list h2.selected span{
+				border: solid 5px rgba(2,0,0,0);
+				border-top: solid 5px #FFF;
+			}
+			.list h2.selected:hover{
+				background: rgba(89,38,33,.4);
+			}
+			.list h2:hover{
+				background: rgba(89,38,33,.2);
+			}
+			.list h2 span{
+				width: 0px;
+				height: 0px;
+				display: inline-block;
+				border: solid 5px rgba(0,0,0,0);
+				border-left: solid 5px #8A2BE2;
+				margin: 0 10px;
+			}
+			.list ul{
+				display: none;
+			}
+			.list ul.selected{
+				display: block;
+			}
+			.list ul li{
+				line-height: 30px;
+				padding-left: 30px;
+			}
+			.list ul li.selected{
+				background: blanchedalmond;
+			}
+			.list ul li.selected:hover{
+				background: blanchedalmond;
+			}
+			.list ul li:hover{
+				background: #8C89B6;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="list">
+				<h2><span></span>我的好友</h2>
+				<ul>
+						<li class="hover">小佳love</li>
+						<li class="hover">从来就是这么正经</li>
+						<li class="hover">他是个胖子</li>
+						<li class="hover">啦啦啦啦</li>
+				</ul>
+			</div>
+			<div class="list">
+				<h2><span></span>企业好友</h2>
+				<ul>
+						<li class="hover">小明</li>
+						<li class="hover">小红</li>
+						<li class="hover">小黑</li>
+				</ul>
+			</div>
+			<div class="list">
+				<h2><span></span>黑名单</h2>
+				<ul>
+						<li class="hover">哇哇</li>
+						<li class="hover">咿呀</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script>
+		var aH2 = document.querySelectorAll(".list h2");
+		var aUl = document.querySelectorAll(".container ul");
+		var aLi = document.querySelectorAll(".container li")
+		var prev = 0;
+		var prevLi = 0;
+		
+		for(var i=0;i<aH2.length;i++){
+			aH2[i].index = i;
+			aH2[i].onclick = function(){
+				
+				//清除上一个
+				if(prev != this.index){
+					aH2[prev].classList.remove('selected');
+					aUl[prev].classList.remove('selected');
+				}
+				
+				//给当前添加
+				var ret = this.classList.toggle('selected');
+				aUl[this.index].classList.toggle('selected',ret);
+				
+				//将当前设为上一个
+				prev = this.index;
+			};
+		}
+		
+		for(var i=0;i<aLi.length;i++){
+			aLi[i].index = i;
+			aLi[i].onclick = function(){
+				if(prevLi != this.index){
+					aLi[prevLi].classList.remove('selected');
+				}
+				this.classList.toggle('selected');
+				prevLi = this.index;
+			};
+		}
+	</script>
+</html>
