@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,img,ul{margin: 0; padding: 0;}
+			li{list-style: none;}
+			img{border: none;}
+			
+			.container{width: 1000px; height: 800px; margin: 0 auto; padding-top: 20px; background: url(img/bg.jpg) no-repeat;}
+			.phone{width: 322px; padding-top: 18px; box-shadow: 10px 10px 10px #8c89b6; padding-bottom: 14px; position: fixed; left: 50%; top: 5%; margin-left: -161px; background: #DDDDDD; border-radius: 14px;}
+			.line{width: 46px; margin: 0 auto; margin-bottom: 18px; height: 3px; border-radius: 20px; background: #999;}
+			.content{width: 280px; height: 480px; margin: 0 auto; margin-bottom: 14px;  background: #FFF; border: solid 2px #666;}
+			.home{width:50px; margin: 0 auto;  height:40px; background: url(img/miaov.png);}
+			
+			.displayBox{width: 280px; height:424px; overflow: hidden; background: url(img/rbg.jpg) no-repeat #FFF;}
+			.displayBox li{overflow: hidden; width:280px; padding: 5px 0;}
+			
+			.lico .textMain, .rico .textMain{max-width:160px; min-height: 26px; word-break: break-word; line-height: 26px; padding: 4px 6px; border-radius: 6px; font-size: 14px; margin-top: 7px;}
+			.lico .textMain{float:left; background: #DDDDDD; color: #666;}
+			.lico .arrow{width:5px; height:9px; background: url(img/l01.png) no-repeat center center; margin-top: 17px; float: left;}
+			.lico .emo{float: left; margin:2px 10px;}
+			
+			.rico .textMain{float:right; color: #FFF; background: #B2A9C8;}
+			.rico .arrow{width:5px; height:9px; background: url(img/r01.png) no-repeat center center; margin-top: 17px; float: right;}
+			.rico .emo{float: right; margin:2px 10px;}
+			
+			.inputBox{height: 56px; background: #DDDDDD;}
+			#emo{margin: 10px; display: block; float: left;}
+			.inputBox .text{width:170px; border: none; display: block; float: left; margin-top: 8px; padding-left: 6px; border-radius: 6px; line-height: 36px; color: #333;}
+			.inputBox .btn{width: 46px; border: none; display: block; float: left; border: none; cursor: pointer; margin-top: 11px; font-size: 14px; font-family: "微软雅黑"; font-weight: bold; line-height: 30px; color: #8A2BE2;}
+			
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="phone">
+				<div class="line"></div>
+				<div class="content">
+					<ul class="displayBox"></ul>
+					<div class="inputBox">
+						<img src="img/lico.png" id="emo"  />
+						<input type="text" placeholder="请输入" class="text" />
+						<button class="btn">发送</button>
+					</div>
+				</div>
+				<div class="home"></div>
+			</div>
+		</div>
+	</body>
+	<script>
+		 var display = document.querySelector('.displayBox');
+		 var imo = document.getElementById('emo');
+		 var text = document.querySelector('.text');
+		 var btn = document.querySelector('.btn');
+		 var arr = ['img/lico.png','img/rico.png']
+		 var onOff = true;  //true代表蓝色小人，false代表红色小人
+		 var str = '';
+		 
+		 //输入框聚焦
+		 text.focus();
+		 
+		 //点击切换表情
+		 imo.onclick = function(){
+		 	imo.src = onOff ? arr[1] : arr[0];
+		 	onOff = !onOff;
+		 	text.focus();
+		 };
+		 
+		 btn.onclick = function(){
+		 	//如果内容为空，则提示写点东西
+		 	if(!text.value){
+		 		alert('亲，请写点什么吧');
+		 	}else {	
+		 		var cls = onOff ? 'lico' : 'rico';
+		 		//  两种样式尽量用一个变量，方便函数封装
+		 		display.innerHTML = `	
+		 			<li class = ${cls}>  
+		 				<img class="emo" src = img/${cls}.png />
+		 				<div class="arrow"></div>
+		 				<div class = "textMain">
+		 					${text.value}
+		 				</div>
+		 			</li>
+		 		` + display.innerHTML;
+		 	}
+		 	
+		 	text.focus();
+		 	text.value = '';
+		 };
+	</script>
+</html>
