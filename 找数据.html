@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			html,body{
+				width: 100%;
+				height: 100%;
+			}
+			body{
+				background: url(img/bg.png) no-repeat fixed center center;
+				background-size: cover;
+			}
+			.container{
+				width: 560px;
+				height: 500px;
+				margin: 0 auto;
+				position: relative;
+			}
+			button{
+				width: 80px;
+				line-height: 24px;
+				border-radius: 300px;
+				position: absolute;
+				top: 64%;
+				right: 0;
+				border: solid 2px #FFF;
+				background: rgba(0,0,0,0);
+				color: #FFF;
+			}
+			.concludes{
+				position: absolute;
+				top: 64%;
+				left: 0;
+			}
+			.concludes div{
+				font-size: 14px;
+				color: #FFF;
+				line-height: 24px;
+			}
+			#line1{
+				color: yellow;
+			}
+			#line2{
+				color: yellowgreen;
+			}
+			#line3{
+				color: deepskyblue;
+			}
+			#line4{
+				color: violet;
+			}
+			#line5{
+				color: palevioletred;
+			}
+			#line6{
+				color: burlywood;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<button id="btn">开始查找</button>
+			<div class="concludes">
+				<div id="line1"></div>
+				<div id="line2"></div>
+				<div id="line3"></div> 
+				<div id="line4"></div>
+				<div id="line5"></div>
+				<div id="line6"></div>
+			</div>
+		</div>
+	</body>
+	<script>
+		var btn = document.getElementById('btn');
+		var line1 = document.getElementById('line1');
+		var line2 = document.getElementById('line2');
+		var line3 = document.getElementById('line3');
+		var line4 = document.getElementById('line4');
+		var line5 = document.getElementById('line5');
+		var line6 = document.getElementById('line6');
+		var arr = ['100px', 'abc' - 6, [], -98765, 34, -2, 0, '300', , function() {
+    alert(1);
+}, null, document, [], true, '200px' - 30, '23.45元', 5, Number('abc'), function() {
+    alert(3);
+}, 'xyz' - 90];
+		
+		var str1 = str2 = str3 = str4 = str5 = str6 = '';
+		var maxNum = -Infinity;
+		
+		btn.onclick = function(){
+			
+			for(var i=0;i<arr.length;i++){
+				
+				if(typeof arr[i] == 'number' && arr[i]==arr[i]){  //所有的数字
+					str1 += arr[i] + ', '
+				}
+				
+				//parseFloat运算找出所有可以转成数字的，且不找0、空数组、空格，number运算可能会找出空数组
+				if(  parseFloat(arr[i])    ){  //  可以转成数字的
+					str2 += arr[i] + ', ';
+					maxNum = parseFloat(arr[i]) > maxNum ? parseFloat(arr[i]) : maxNum;  //  转成数字的最大值
+				}
+				
+				//是数字类型，并且是NaN，如果不加数字类型，那么Number(数组/函数等对象)的时候也是NaN
+				if(  arr[i] !== arr[i]     ){  //  所有NaN的位置
+					str4 += i + ', ' ;
+				}
+				
+				if(  arr[i] === null  ){  //  所有null的位置
+					str5 += i + ', ';
+				}
+				
+				if(  Number(arr[i]) == 0 && parseInt(arr[i])!=parseInt(arr[i]) &&  arr[i]!==null        ){  //  所有空数组的位置
+					str6 += i + ', ';
+				}
+				
+			}
+			
+			line1.innerHTML = '❶ 所有的数字是：' + str1;
+			line2.innerHTML = '❷ 可以转成数字的：' + str2;
+			line3.innerHTML = '❸ 转成数字的最大值：' + maxNum;
+			line4.innerHTML = '❹ 所有运算结果是NaN的位置：' + str4;
+			line5.innerHTML = '❺ 所有null的位置：' + str5;
+			line6.innerHTML = '❺ 所有空数组的位置：' + str6;
+			
+			
+		};
+	</script>
+</html>
