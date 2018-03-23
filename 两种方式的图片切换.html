@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,img,ul{margin: 0; padding: 0;}
+			li{list-style: none;}
+			img{border: none;}
+			
+			.container{
+				width: 1000px;
+				height: auto;
+				margin: 0 auto;
+				padding: 50px 0;
+				background: url(img/bg.jpg);
+				}
+			.iPad{
+				overflow: hidden;
+				width:700px;
+				height: 520px;
+				margin: 0 auto;
+				background: #FFF;
+				border-radius: 20px;
+				}
+			.line{
+				width: 4px;
+				height: 60px;
+				border: solid 1px #DDDDDD;
+				border-radius: 10px;
+				float: left;
+				margin:220px 22px;
+			}
+			.screen{
+				width: 550px;
+				float: left;
+				margin: 46px 0px;
+				border: solid 4px #000;
+				position: relative;
+			}
+			.home{
+				width: 46px;
+				height: 57px;
+				float: left;
+				background: url(img/miaov.png);
+				margin-top: 226px;
+				margin-left: 20px;
+			}
+			.topBox{
+				padding: 14px 0;
+				background: #000;
+			}
+			#tab{
+				overflow: hidden;
+				padding: 0 132px;
+			}
+			.loop, .sequence{
+				width: 140px;
+				height: 38px;
+				float: left;
+				display: block;
+				text-align: center;
+				font-weight: bold;
+				line-height: 40px;
+				border-radius:2px;
+				color: #FFF;
+				border: solid 1px #FFF;
+				cursor: pointer;
+			}
+			.loop{
+				border-right: none;
+			}
+			#tabTip{
+				display: block;
+				font-family: "微软雅黑";
+				letter-spacing: 0.1em;
+				color: #999;
+				line-height: 40px;
+				font-size: 14px;
+				text-align: center;
+			}
+			.picBox{
+				position: relative;
+			}
+			#prev, #next{
+				width: 40px;
+				height: 60px;
+				position: absolute;
+				top: 120px;
+				cursor: pointer;
+				z-index: 100;
+				}
+			#prev{
+				background: url(img/prev.png) center center no-repeat;
+				left: 4px;
+			}
+			#prev:hover{
+				background: url(img/prev.png) center center no-repeat rgba(0,0,0,0.3);
+			}
+			#next{
+				background: url(img/next.png) center center no-repeat;
+				left: 505px;
+			}
+			#next:hover{
+				background: url(img/next.png) center center no-repeat rgba(0,0,0,0.3);
+			}
+			#picMain{
+				width: 550px;
+				height: 310px;
+				vertical-align: bottom;
+			}
+			.tabSelect{
+				color: #111;
+				background: #FFF;
+			}
+			#picNum{
+				position: absolute;
+				font-family: arial;
+				font-size: 16x;
+				color: #FFF;
+				top: 6px;
+				left: 260px;
+			}
+			#picText{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				display: block;
+				width: 550px;
+				text-align: center;
+				line-height: 40px;
+				color: #FFF;
+				font-size: 18px;
+				background: rgba(0,0,0,0.7);
+			}
+			#ejectBox1C, #ejectBox2C{
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 99;
+				background: rgba(0,0,0,0.2);
+				width: 550px;
+				height: 418px;
+				display: none;
+			}
+			#ejectBox1, #ejectBox2{
+				width: 300px;
+				padding: 15px 10px 25px 10px;
+				background: rgba(0,0,0,0.6);
+				top: 190px;
+				margin: 160px 0 0 116px;
+				border: solid 1px #999999;
+			}
+			#ejectBox1 h2, #ejectBox2 h2{
+				line-height: 28px;
+				font-family: helvetica;
+				font-weight: normal;
+				font-size: 22px;
+				text-align: center;
+				color: #FFF;
+			}
+			#ejectBox1 span, #ejectBox2 span{
+				display: block;
+				font-family: helvetica;
+				font-weight: normal;
+				font-size: 14px;
+				text-align: center;
+				color: #999;
+				margin-bottom: 15px;
+			}
+			#btn1, #btn2{
+				border: solid 1px #FFF;
+				border-radius: 2px;
+				color: #FFF;
+				font-size: 14px;
+				background: rgba(0,0,0,0);
+				line-height: 26px;
+				padding: 0 30px;
+				margin-left: 100px;
+				cursor: pointer;
+			}
+			#closeIco1, #closeIco2{
+				width: 11px;
+				height: 11px;
+				background: url(img/close.png);
+				position: absolute;
+				top: 180px;
+				left: 400px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="iPad">
+				<div class="line"></div>
+				<div class="screen">
+					<div class="topBox">
+						<div id="tab">
+							<span class="loop">循环切换</span>
+							<span class="sequence">顺序切换</span>
+						</div>
+						<span id="tabTip">图片可以从最后一张跳转到第一张循环切换</span>
+					</div>
+					<div class="picBox">
+						<a id="prev"></a>
+						<img id="picMain" />
+						<a id="next"></a>
+						<span id="picNum"></span>
+						<span id="picText"></span>
+					</div>
+					<div id="ejectBox1C">
+						<div id="ejectBox1">
+							<div id="prev1"></div>
+							<h2>JavaScript提醒</h2>
+							<span>已经到第一张啦~</span>
+							<button id="btn1">确定</button>
+							<div id="closeIco1"></div>
+						</div>
+					</div>
+					<div id="ejectBox2C">
+						<div id="ejectBox2">
+							<div id="next1"></div>
+							<h2>JavaScript提醒</h2>
+							<span>已经到最后一张啦~</span>
+							<button id="btn2">确定</button>
+							<div id="closeIco2"></div>
+						</div>
+					</div>
+				</div>
+				<div class="home"></div>
+			</div>
+		</div>
+	</body>
+	<script>
+		var loop = document.querySelector('.loop');
+		var sequence = document.querySelector('.sequence');
+		var tabTip = document.getElementById('tabTip');
+		var picMain = document.getElementById('picMain');
+		var prev = document.getElementById('prev');
+		var next = document.getElementById('next');
+		var prev1 = document.getElementById('prev1');
+		var next1 = document.getElementById('next1');
+		var picNum = document.getElementById('picNum');
+		var picText = document.getElementById('picText');
+		var loopOn = true;
+		var num = 0;
+		var aPicSrc = ['img/img01.jpg','img/img02.jpg','img/img03.jpg','img/img04.jpg'];
+		var aPicText = ['第一张图','第二张图','第三张图','第四张图']
+		var len = aPicSrc.length;
+		var ejectBox1C = document.getElementById('ejectBox1C');
+		var ejectBox2C = document.getElementById('ejectBox2C');
+		var btn1 = document.getElementById('btn1');
+		var btn2 = document.getElementById('btn2');
+		var closeIco1 = document.getElementById('closeIco1');
+		var closeIco2 = document.getElementById('closeIco2');
+		var eject = false;
+		
+		//初始化
+		loop.classList.add('tabSelect');
+		tab();
+		
+		//tab函数将num对应到图片
+		function tab(){
+			picMain.src = aPicSrc[num];
+			picNum.innerHTML = (num+1) +'/'+ len;
+			picText.innerHTML = aPicText[num];
+		}
+		
+		sequence.onclick = function(){
+			loop.classList.remove('tabSelect');
+			sequence.classList.add('tabSelect');
+			tabTip.innerHTML = '图片只能到最后一张或只能到第一张切换';
+			loopOn = false; 
+		};
+		loop.onclick = function(){
+			sequence.classList.remove('tabSelect');
+			loop.classList.add('tabSelect');
+			tabTip.innerHTML = '图片可以从最后一张跳转到第一张循环切换';
+			loopOn = true;
+		};
+		
+		prev.onclick = function(){
+			if(!eject){
+				if(loopOn){  // loop模式
+					num = num==0 ? num = len-1 : --num;
+					tab();
+				}else if(num==0){ //  弹出这是第一张
+					ejectBox1C.style.display = 'block';
+					eject = true;
+				}else{
+					--num;
+					tab();
+				}
+			}
+		};
+		
+		next.onclick = function(){
+			if(!eject){
+				if(loopOn){  // loop模式
+					num = num==len-1 ? num = 0 : ++num;
+					tab();
+				}else if(num==len-1){  //  弹出这是最后一张
+					ejectBox2C.style.display = 'block';
+					eject = true;
+				}else{
+					++num;
+					tab();
+				}
+			}
+		};
+		
+		btn1.onclick = closeIco1.onclick = function(){
+			ejectBox1C.style.display = 'none';
+			eject = false;
+		};
+		btn2.onclick = closeIco2.onclick = function(){
+			ejectBox2C.style.display = 'none';
+			eject = false;
+		};
+	</script>
+</html>
+
+
+//宽度设置问题
+//tab标签如何更好地写
+//css3能不能修改背景图片的颜色
