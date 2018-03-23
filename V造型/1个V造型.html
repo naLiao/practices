@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				background: #B9B3CD;
+			}
+			#boxContainer{
+				width: 100%;
+				margin: 60px 0 0 20px;
+				position: relative;
+			}
+			.box{
+				width: 50px;
+				height: 50px;
+				background: #FFF;
+				border-radius: 4px;
+				text-align: center;
+				line-height: 50px;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="text" id="text" />
+		<button id="btn">生成</button>
+		<div id="boxContainer"></div>
+	</body>
+	<script>
+		var text = document.getElementById('text');
+		var btn = document.getElementById('btn');
+		var boxContainer = document.getElementById('boxContainer');
+		var aBox = boxContainer.getElementsByTagName('div');
+		var arrColor = ['red','violet','pink','greenyellow']
+		var colorNum = 0;
+		
+		//输入框聚焦
+		text.focus();
+		
+		btn.onclick = function(){
+			var num = text.value;
+			boxContainer.innerHTML = '';
+			
+			if( num%2===1 ){  // 如果是奇数
+				
+				//创建数量为num的div
+				for(var i=0;i<num;i++){
+					boxContainer.innerHTML += `<div class="box">${i+1}</div>`;
+				}
+				
+				//排列造型
+				for(var i=0;i<aBox.length;i++){
+					//div的背景色为几种颜色循环
+					aBox[i].style.backgroundColor = arrColor[colorNum++];
+					colorNum %= arrColor.length;
+					
+					//top属性先递增，到一半之后改为递减，left属性一直递增
+					var n = i>aBox.length/2 ? aBox.length-1-i : i;
+					aBox[i].style.top = n*55 + 'px';
+					aBox[i].style.left = i*55 +'px';
+				} 
+			}else{  //如果是偶数
+				alert('请输入奇数!');
+			}
+			
+			text.value = '';
+			text.focus();
+		};
+		
+	</script>
+</html>

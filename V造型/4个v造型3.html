@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			html,body{
+				height: 100%;
+				}
+			body{
+				background: url(img/bg.png) no-repeat center center;
+				}
+			
+			#centerBox{
+				width: 290px;
+				height: 490px;
+				background: url(img/bg1.png);
+				position: fixed;
+				left: 50%;
+				top: 50%;
+				margin-left: -145px;
+				margin-top: -245px;
+			}
+			#btn{
+				width: 100px;
+				height: 40px;
+				background: #8A2BE2;
+				border: none;
+				color: #FFF;
+				font-size: 16px;
+				border-radius: 2px;
+				position: absolute;
+				top: 85%;
+				left: 50%;
+				margin-left: -50px;
+				cursor: pointer;
+			}
+			.box{
+				width: 50px;
+				height: 50px;
+				background: #FFF;
+				color: #8A2BE2;
+				border-radius: 2px;
+				position: absolute;
+				line-height: 50px;
+				text-align: center;
+			}
+			#boxContainer{
+				width: 250px;
+				height: 250px;
+				position: relative;
+				margin: 100px 20px;
+			}
+			#boxContainer div{
+				transition: 200ms ease-in-out;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="centerBox">
+			<button id="btn">生成</button>
+			<div id="boxContainer"></div>
+		</div>
+	</body>
+	<script>
+		var boxContainer = document.getElementById('boxContainer');
+		var btn = document.getElementById('btn');
+		var aBox = boxContainer.getElementsByTagName('div');
+		var first = true;
+		var num = 0;
+		var arrPosi = [
+					['left','top'],
+					['top','right'],
+					['right','bottom'],
+					['bottom','left']
+		];
+		
+		
+		btn.onclick = function () {
+			
+			//如果是第一次点击则生成5个块
+			if(first){ 
+				btn.innerHTML = '变换';
+				for(var i=0;i<5;i++){
+					boxContainer.innerHTML += `
+												<div class="box">
+													${i+1}
+												</div>
+												`;					
+				}
+				first = false;
+			}
+			
+			//点击的时候五个块变化left和top值
+			for(var i=0;i<5;i++){
+				//清空样式
+				aBox[i].style.top = aBox[i].style.left = aBox[i].style.bottom = aBox[i].style.right = null;
+				
+				var n = i>5/2 ? 5-i-1 : i;
+				aBox[i].style[ arrPosi[num][0] ] = i*50 + 'px';
+				aBox[i].style[ arrPosi[num][1] ] = n*50  + 'px';
+				
+			}
+			num++;
+			num %= 4;
+			
+		}
+	</script>
+</html>
