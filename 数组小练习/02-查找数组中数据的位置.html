@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    /**
+     * 1 封装一个函数叫 indexOf
+     * 2 indexOf 函数的第一个参数为要查找的数组，第二个参数为要查找的数据
+     * 3 调用这个函数，如果要查找的数据未找到，那么函数的返回值为-1，如果找到那么返回这个数据的位置
+     */
+    
+    function indexOf(arr, item){
+    	if(arr.length == 0) return undefined;
+				
+			for(var i=0;i<arr.length;i++){
+				if(arr[i] === item) return i;
+			}
+				
+			return -1;  //最后的return得写在for循环外面，否则循环一次就结束了
+    }
+    
+    var arr = [1, 2, 'a', 4 ,'1'];
+    
+    console.log(indexOf(arr, 'a'));  // 2
+    console.log(indexOf(arr, '1'));  // 4
+    console.log(indexOf(arr, 10));  // -1
+  </script>
+</body>
+</html>

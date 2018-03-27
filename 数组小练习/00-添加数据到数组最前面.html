@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script>
+		var arr = [1,2,3,4];
+		console.log(  unshift(arr,8,7,6,5)  );
+		
+		function unshift(arr,...rest){
+			for(var i=0;i<rest.length;i++){
+				
+				for(var j=arr.length;j>0;j--){
+					arr[j] = arr[j-1];
+				}
+				
+				arr[0] = rest[i];
+			}
+			return arr.length;
+		}
+	</script>
+</html>

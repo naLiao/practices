@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    /**
+     * 1 封装一个函数，名字叫做 pop
+     * 2 pop函数的参数是唯一的数组
+     * 3 调用pop函数，删除数组中最后一个数据
+     * 4 如果这个数组是空，那么调用这个函数，返回值是 undefined
+     * 5 如果不是空数组返回值为被删除的数据
+     */
+    
+    var arr = [1,2,3];
+    
+    function pop(arr){
+    	var last = arr[arr.length-1];
+    	if(String(arr) === '') return;
+			arr.length--;
+			return last;
+    }
+    console.log(pop(arr));  // 3
+    console.log(arr); // [1, 2]
+    
+    // -------------------------------------------------------------------------
+    
+    
+    /**
+     * 1 封装一个函数，名字叫做 shift
+     * 2 shift函数的参数是唯一的数组
+     * 3 调用shift函数，删除数组中第一个数据
+     * 4 如果这个数组是空，那么调用这个函数，返回值是 undefined
+     * 5 如果不是空数组返回值为被删除的数据
+     */
+    
+    function shift(arr){
+			if(String(arr) === '') return;
+			var first = arr[0];
+			for(var i=0;i<arr.length-1;i++){
+				arr[i] = arr[i+1];
+			}
+			arr.length--;
+			return first;
+    }
+    
+    var arr = ['a','b','c'];
+    
+    console.log(shift(arr));  // 'a'
+    console.log(arr);  // ['b', 'c']
+  
+  </script>
+</body>
+</html>

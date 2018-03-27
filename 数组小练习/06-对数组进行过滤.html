@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    /**
+     * 1 封装一个函数叫做filter
+     * 2 该函数的第一个参数是要过滤的数组，第二个参数是一个函数成为过滤函数
+     * 3 调用这个方法，会对数组进行遍历
+     * 4 每次遍历，都会把数组的当前这项和索引值当作参数传给过滤函数
+     * 5 这个过滤函数的规则一旦符合就返回这个值
+     * 6 filter函数最终返回所有符合条件的数据的集合，一个新数组。
+     */
+    
+    function push(arr, ...rest) {
+      for (var i=0; i<rest.length; i++) {
+        arr[arr.length] = rest[i]
+      }
+      return arr.length;
+    }
+    
+    function filter(arr, cb){
+    	var newArr = [];
+      for(var i=0;i<arr.length;i++){
+      	var ret = cb(arr[i],i);
+      	if(ret) push(newArr,arr[i]);
+      }
+      return newArr;
+    }
+    
+    var arr = [11, 4, 7, 12, 17, 9];
+    
+    var result = filter(arr, function (item, i){
+      console.log(i);
+      return item > 10;
+    });
+    
+    console.log(result);  // [11, 12, 17];
+    
+  </script>
+</body>
+</html>

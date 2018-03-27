@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    /**
+     * 1 封装一个函数叫做 reverse
+     * 2 该函数的参数是一个数组
+     * 3 调用这个函数，那么数组将会反转
+     * 4 返回反转后的数组
+     */
+    
+//  function reverse(arr){
+//			var newArr = [];
+//			var len = arr.length;
+//			newArr.length = len;
+//			for(var i=0;i<len;i++){
+//				newArr[i] = arr[len-1-i];
+//			}
+//			return newArr;
+//  }
+		
+		function reverse(arr){
+			if(arr.length<2) return arr;
+			for(var i=0;i<arr.length;i++){
+				var start = i;
+				var end = arr.length-i-1;
+				
+				if( start<end ){
+					[arr[start],arr[end]] = [arr[end],arr[start]];
+				}
+			}
+			return arr;
+		}
+    
+    var arr = [1, 2, 3, 4, 5];
+    
+    console.log(reverse(arr));  // [3, 2, 1]
+    console.log(arr);  // [3, 2, 1]
+    
+    
+  </script>
+</body>
+</html>

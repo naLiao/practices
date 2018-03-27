@@ -1,0 +1,37 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    /**
+     * 1 封装一个函数叫做 spliceOne 
+     * 2 该函数的第一个参数是数组，第二个参数是索引
+     * 3 调用这个函数，可以删除这个索引对应的数据
+     * 4 如果是空数组，那么返回undefined，否则返回这个被删除的数据
+     */
+    
+    function spliceOne(arr, index){
+			if(!arr.length) return;
+			var a = arr[index];
+			for(var i=index;i<arr.length-1;i++){
+				arr[i] = arr[i+1];
+				console.log(arr[i+1]);
+			}
+			arr.length--;
+			return a;
+    }
+    
+    var arr = [1, 2, 3, 4];
+    
+    console.log(spliceOne(arr, 2));  // 3
+    console.log(arr);  // [1, 2, 4];
+  
+  
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    /**
+     * 1 封装一个函数名字叫做 slice
+     * 2 这个函数的参数有3个，第一个是必选的要操作的数组，后面2个可选，第二个是要截取的开始位置，第三个是结束的位置
+     * 3 调用这个函数，分为以下几种情况
+     *  - 如果只传了这个数组，那么返回这个数组的浅拷贝
+     *  - 如果只传了开始位置，那么会一直截取到数组的最后
+     *  - 如果开始位置大于数组的长度，那么会返回空数组
+     *  - 如果结束位置大于数组的长度，那么结束位置就等于数组的长度
+     *  - 如果开始位置大于结束位置，那么返回空数组
+     *  - 如果开始位置或者结束位置是一个负数，那么相当于这个负数加上length， 如果相加之后的结果依然是个负数，那么返回空数组
+     *  - 例如：var arr = [1, 2, 3, 4] 那么调用 slice(arr, 1, 3)，会截取这个数组 arr 中 从1开始到3结束，不包括结束位置的所有数据，返回值也就是 [2, 3]
+     */
+    var arr = [1,2,3,4];
+    console.log( slice(arr));
+    console.log( slice(arr,1) );
+    console.log( slice(arr,4,3) );
+    console.log( slice(arr,1,6) );
+    console.log( slice(arr,6,1) );
+    console.log( slice(arr,-7,1) );
+    console.log( slice(arr,-2,4) );
+    
+    function push(arr, ...rest) {
+      for (var i=0; i<rest.length; i++) {
+        arr[arr.length] = rest[i]
+      }
+      return arr.length;
+    }
+    
+    function slice(arr,start,stop){
+    	
+    	var newArr = [];
+    	var len = arr.length;
+    	
+    	if( arguments.length ==1 ) newArr = [...arr];
+    	if( arguments.length == 2  ||  stop > len ) stop = len;
+      if( start<0 ) start += len;
+      if( stop<0 ) stop += len;
+      if( !arr ||  start >= len ||  start<0  ||  stop<0  ||  start > stop  ) return [];
+    	
+    	for(var i=start;i<stop;i++){
+    		push(newArr,arr[i]);
+    	}
+    	
+    	return newArr;
+    }
+  </script>
+</body>
+</html>
