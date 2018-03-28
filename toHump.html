@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		function toHump(str){
+			const arr = str.split('-');
+			for(let i=1;i<arr.length;i++){
+				let first = arr[i][0].toUpperCase();
+				arr[i] = first + arr[i].substr(1);
+			}
+			return arr.join('');
+		}
+	</script>
+</html>
