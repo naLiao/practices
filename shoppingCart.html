@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,ul{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			body,html{
+				width: 100%;
+				height: 100%;
+			}
+			body{
+				background: #333333;
+			}
+			.warp{
+				width: 1000px;
+				height: 600px;
+				margin: 0 auto;
+				display: flex;
+			}
+			.container{
+				width: 900px;
+				height: 500px;
+				margin: auto;
+				background: #5F9EA0;
+				position: relative;
+				border-radius: 8px;
+				color: #FFF;
+			}
+			.list li{
+				width: 100%;
+				height: 60px;
+				line-height: 60px;
+				padding: 0 40px;
+				box-sizing: border-box;
+				border-bottom: solid 1px #ADD8E6;
+			}
+			.list li span{
+				display: inline-block;
+				height: 30px;
+			}
+			.list li .goods{
+				width: 400px;
+				font-size: 20px;
+			}
+			.list li .numBox{
+				width: 90px;
+				height: 30px;
+				margin-left: 20px;
+			}
+			.list li .numBox i{
+				display: inline-block;
+				box-sizing: border-box;
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				border: solid 1px #FFF;
+				font-size: 20px;
+				color: #FFF;
+			}
+			.list li .numBox .minus{
+				border-right: solid 1px #FFF;
+				cursor: pointer;
+			}
+			.list li .numBox .plus{
+				border-left: solid 1px #FFF;
+				cursor: pointer;
+			}
+			.list li .numBox .minus:hover, .list li .numBox .plus:hover{
+				color: pink;
+			}
+			.list li .priceBox{
+				margin-left: 40px;
+			}
+			.compute{
+				width: 100%;
+				height: 100px;
+				position: absolute;
+				bottom: 0;
+				background: #DE4A63;
+				
+			}
+			.compute{
+				padding: 0 40px;
+				box-sizing: border-box;
+				border-bottom-left-radius: 8px;
+				border-bottom-right-radius: 8px;
+			}
+			.compute em{
+				display: inline-block;
+				padding: 0 10px;
+			}
+			.compute span{
+				display: block;
+				width: 300px;
+				position: absolute;
+				right: 0;
+				height: 40px;
+				line-height: 40px;
+				display: block;
+			}
+			.compute span:nth-of-type(1){
+				top: 10px;
+			}
+			.compute span:nth-of-type(2){
+				top: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div class="container">
+				<ul class="list">
+				</ul>
+				<div class="compute">
+					<span>商品总计<em>0</em>件，总价<em>0</em>元</span>
+					<span>其中最贵的商品单价是<em>0</em>元</span>
+				</div>
+			</div>
+		</div>
+		<script>
+			data = [
+			{
+				id : 0,
+				name : '面粉',
+				num : 0,
+				price : 40,
+				total : 0
+			},
+			{
+				id : 1,
+				name : '大米',
+				num : 0,
+				price : 20.5,
+				total : 0
+			},
+			{
+				id : 2,
+				name : '小米',
+				num : 0,
+				price : 13.5,
+				total : 0
+			},
+			{
+				id : 3,
+				name : '玉米',
+				num : 0,
+				price : 24.5,
+				total : 0
+			},
+			{
+				id : 4,
+				name : '红豆粉',
+				num : 0,
+				price : 38.5,
+				total : 0
+			},
+			{
+				id : 5,
+				name : '黑米',
+				num : 0,
+				price : 15,
+				total : 0
+			}
+			]
+			let list = document.querySelector(".list");
+			let str = '';
+			
+			//创建商品列表
+			createGoodsHtml();
+			
+			function createGoodsHtml(){
+				for(let i=0;i<data.length;i++){
+					str += `<li>
+							<span class="goods">${data[i].name}</span>
+							<span class="numBox">
+								<i class="minus">-</i><i class="num">${data[i].num}</i><i class="plus">+</i>
+							</span>
+							<span class="priceBox">
+								单价：<strong class="price">${data[i].price}</strong>元，小计：<strong class="total">${data[i].total}</strong>元
+							</span>
+						</li>`;
+				}
+				
+				list.innerHTML = str;
+			}
+			
+			const aLi = list.querySelectorAll('li');
+			
+			//函数执行数组长度次
+			for(let i=0;i<aLi.length;i++){
+				shoppingCart(i);
+			}
+			
+			function shoppingCart(a){
+				const aI = aLi[a].querySelectorAll('.numBox i');
+				const total =  aLi[a].querySelector('.total');
+				const aCompute = document.querySelectorAll(".compute em");
+				aI[0].onclick = function(){
+					data[a].num = data[a].num === 0 ? 0 : --data[a].num;
+					dataConnectView();
+				};
+				aI[2].onclick = function(){
+					data[a].num++;
+					dataConnectView();
+				};
+				
+				function dataConnectView(){
+					aI[1].innerHTML = data[a].num;
+					total.innerHTML =data[a].total = data[a].num * data[a].price;
+					let [x,y,z] = [0,0,0];
+					for(let i=0;i<data.length;i++){
+						x += data[i].num;
+						y += data[i].total;
+						z = data[i].num&&data[i].price > z ? data[i].price : z;
+					}
+					[aCompute[0].innerHTML,aCompute[1].innerHTML,aCompute[2].innerHTML] = [x,y,z];
+				}
+			};
+		</script>
+	</body>
+</html>
