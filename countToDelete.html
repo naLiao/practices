@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,ul{
+				margin: 0;
+				padding: 0;
+			}
+			body,html{
+				width: 100%;
+				height: 100%;
+			}
+			li{
+				list-style: none;
+			}
+			body{
+				background: #ADD8E6;
+			}
+			.warp{
+				width: 100%;
+				margin-top: 80px;
+			}
+			.container{
+				width: 500px;
+				height: 500px;
+				margin: 0 auto;
+				position: relative;
+			}
+			.container button{
+				position: absolute;
+				width: 120px;
+				height: 40px;
+				border: none;
+				color: #FFF;
+				font-size: 20px;
+				background: #5F9EA0;
+				top: 230px;
+				left: 190px;
+				z-index: 111;
+			}
+			.list{
+				width: 500px;
+				height: 500px;
+				position: relative;
+			}
+			.list:hover{
+				transform: rotate(3000deg);
+				transition: 300000ms;
+			}
+			.list li{
+				width: 42px;
+				height: 42px;
+				border-radius: 50%;
+				line-height: 40px;
+				font-size: 20px;
+				text-align: center;
+				color: #FFF;
+				background: pink;
+				position: absolute;
+				border: solid 2px #FFF;
+				transform: translate(-50%,-50%);
+				z-index: 11;
+			}
+			.list em{
+				width: 1px;
+				height: 250px;
+				background: #9A4E79;
+				position: absolute;
+				top: 0;
+				left: 250px;
+				transform-origin:center bottom;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div class="container">
+				<button>开始消除</button>
+				<ul class="list"></ul>
+			</div>
+		</div>
+	</body>
+	<script>
+		const btn = document.querySelector('.container button');
+		const list = document.querySelector(".list");
+		var arr = [];
+		let str = '';
+		
+		//初始化创建数组，形成一个圆
+		for(let i=0;i<30;i++){
+			arr.push(i+1);
+		}
+		
+		for(let i=0;i<30;i++){
+			str += `<li style="background-color:rgb(${parseInt(255*Math.random())},${parseInt(255*Math.random())},${parseInt(255*Math.random())});left:${parseInt(250+250*Math.sin(12*0.017453293*i))}px; top:${parseInt(250-250*Math.cos(12*0.017453293*i))}px">${i+1}</li><em style = "transform:rotate(${12*i}deg)"></em>`
+		}
+		list.innerHTML = str;
+		
+		const aLi = document.querySelectorAll(".list li");
+		const aEm = document.querySelectorAll(".list em");
+		let len = aLi.length;
+		let timer = '';
+		let onOff = true;
+		
+		btn.onclick = function(){
+			if(!onOff){
+				for(let i =0;i<len;i++){
+					arr[i] = i+1;
+					aLi[i].style.display = 'block';
+					aEm[i].style.display = 'block';
+				}
+				btn.innerHTML = '开始消除';
+				onOff = true;
+			}
+			else{
+				clearInterval(timer);
+				timer = setInterval( deleteElement , 300 );
+			}
+		};
+		
+		function deleteElement(){
+				if(arr.length === 1) {
+					clearInterval(timer);
+					btn.innerHTML = '再来一次?';
+					onOff = false;
+					return;
+				}
+				for(let i=0;i<2;i++){
+					arr.push(arr.shift());
+				}
+				arr.pop();
+				//View
+				aLi[ret-1].style.display = 'none';
+				aEm[ret-1].style.display = 'none';
+		};
+	</script>
+</html>
