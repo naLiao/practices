@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body, div{
+				margin: 0;
+				padding: 0;
+			}
+			button{
+				border: none;
+				cursor: pointer;
+				outline: none;
+			}
+			body, html{
+				width: 100%;
+				height: 100%;
+			}
+			body{
+				background: #9FA0A5;
+				overflow: hidden;
+			}
+			.container{
+				width: 60%;
+				height: 520px;
+				border: solid 5px #878787;
+				background: #ADD8E6;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				overflow: hidden;
+			}
+			.tip{
+				width: 300px;
+				background: rgba(0,0,0,0.2);
+				border: solid 2px #FFF;
+				line-height: 50px;
+				border-radius: 6px;
+				font-size: 18px;
+				color: #FFF;
+				text-align: center;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				transition: 500ms ease-in-out;
+			}
+			.twoCircle{
+				position: absolute;
+				top: 50%;
+				left: 25%;
+				transform: translateY(-50%);
+				transition: 500ms ease-in-out;
+				z-index: 11;
+			}
+			.score, .miss{
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				border: solid 5px rgba(255,255,255,0.6);
+				line-height: 20px;
+				color: #FFF;
+				font-size: 16px;
+				text-align: center;
+				color: #FFF;
+				box-sizing: border-box;
+				padding-top: 16px;
+			}
+			.score{
+				background: rgba(56,77,235,0.3);
+			}
+			.miss{
+				margin-top: 20px;
+				background: rgba(156,234,35,0.3);
+			}
+			.star{
+				line-height: 52px;
+				font-size: 50px;
+				text-align: center;
+				color: #DEB887;
+				transition: 500ms ease-in-out;
+			}
+			#start{
+				width: 200px;
+				height: 60px;
+				font-size: 22px;
+				color: #FFF;
+				background: #00BFFF;
+				border-radius: 300px;
+				position: absolute;
+				bottom: 40px;
+				left: 50%;
+				transform: translateX(-50%);
+				transition: 500ms ease-in-out;
+			}
+			.ball{
+				width: 80px;
+				height: 80px;
+				position: absolute;
+				top: 0px;
+				background-size: 80px 80px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="twoCircle">
+			<div class="score"><span>0</span>分<br />得分</div>
+			<div class="miss"><span>0</span>分<br />失分</div>
+			<div class="star">★</div>
+			<div class="star">★</div>
+			<div class="star">★</div>
+		</div>
+		<div class="container">
+			<div class="ball"></div>
+			<div class="tip">点击消除小游戏<br />点到得分<br />三次丢分机会</div>
+			<button id="start">开始游戏</button>
+		</div>
+	</body>
+	<script>
+		const container = document.querySelector(".container");
+		const startBtn = document.getElementById('start');
+		const twoCircle = document.querySelector(".twoCircle");
+		const score = document.querySelector(".score span");
+		const miss = document.querySelector(".miss span");
+		const tip = document.querySelector(".tip");
+		const ball = document.querySelector(".ball");
+		const aStars = document.querySelectorAll(".twoCircle .star");
+		let ballstop = false;
+		let timer = null;  //  小球往下降落的定时器
+		let scoreNum = 0;
+		let missNum = 0;
+		let speed = 2;
+		
+		startBtn.onclick = function(){
+			//点击开始按钮，按钮消失，两个圆圈移到左边，提示语句消失
+			gameStart();
+			//生成小球自动往下降落
+			setTimeout(function(){
+				ballRun();
+			},800);
+		}
+		
+		// 点到小球的时候，改变背景图，小球不见
+		ball.onclick = function(){
+			if(ballstop) return;  //  小球停止的时候不可点击
+			clearInterval(timer);
+			ballstop = true;
+			this.style.backgroundImage = 'url(img/emojiboom.png)';
+			
+			setTimeout( function(){
+				dou(ball , 'left' , function(){
+					ball.style.display = 'none';
+					this.clicked = true;
+					score.innerHTML = ++scoreNum;
+					if(!(scoreNum%3)){  //  得分每增加3分，速度加1
+						speed++;
+					}
+					ballRun();
+				})
+			},200);
+		}
+		
+		function gameover(){
+			startBtn.style.bottom = '40px';
+			twoCircle.style.left = '25%';
+			tip.style.opacity = 1;
+		}
+		
+		function gameStart(){
+			startBtn.style.bottom = '-100px';
+			twoCircle.style.left = '10%';
+			aStars[0].style.opacity = 1;
+			aStars[1].style.opacity = 1;
+			aStars[2].style.opacity = 1;
+			tip.style.opacity = 0;
+		}
+		
+		function ballRun(){
+			//  第一步生成一个小球
+			ballCreate();
+			//  第二步让小球往下跑，也就是top值不断增加
+			let num = 0;
+			clearInterval(timer);
+			timer = setInterval(function(){
+				ball.style.top = num +'px';
+				num += speed;
+				ballstop = false;
+				if( parseInt(ball.style.top) > 440 ){  //  num到520-80时停止定时器
+					clearInterval(timer);
+					if(!(ball.clicked)) {  //  如果小球未被点击，失分加一，框上下抖
+						missNum++;
+						aStars[aStars.length-missNum].style.opacity = 0;  //  星星少一颗
+						ball.style.backgroundImage = 'url(img/emojiCry.png)';
+						miss.innerHTML = missNum;  //  失分加1
+						setTimeout(function(){
+							dou(container,'top',function(){
+								if(missNum == 3){  //  如果失分到了3分，游戏结束
+									gameover();
+								}else{  //  否则继续下一个该过程，递归
+									ballRun();
+								}
+							});
+						},200);
+					}
+				}
+			},20)
+		}
+		
+		//  生成小球
+		function ballCreate(){
+			ball.clicked = false;  //  给刚出生小球加未点击属性
+			ball.style.transform = '';
+			ball.style.display = 'block';
+			ball.style.top = 0;
+			ball.style.backgroundImage = `url(img/emoji${Math.ceil(Math.random()*9) || 1}.png)`;
+			ball.style.left = Math.round(Math.random()*60) + '%';
+		}
+		
+		//  抖函数
+		function dou(obj,direction,cb){
+			let timer2 = null;
+			let num = 0;
+			let init = parseFloat( getComputedStyle(obj)[direction] );
+			//创建数组
+			const arr = [];
+			for(let i=10;i>0;i-=2){
+				arr.push(i,-i);
+			}
+			arr.push(0);
+			clearInterval(timer2);
+			timer2 = setInterval(function(){
+				if(num==arr.length) {
+					clearInterval(timer2);
+					cb&&cb();
+				}
+				obj.style[direction] = arr[num] + init + 'px';
+				num++;
+			},30)
+		}
+	</script>
+</html>
