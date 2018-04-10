@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.warp{
+				width: 50%;
+				height: 100px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				border: solid 3px #FFA500;
+				background: #000;
+				display: flex;
+				align-items: center;
+				/*justify-content: space-around;*/
+				box-sizing: border-box;
+				padding: 20px;
+			}
+			.box{
+				width: 360px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div class="box">
+				<img src="img/0.png" />
+				<img src="img/0.png" />
+				<img src="img/second1.png" />
+				<img src="img/0.png" />
+				<img src="img/0.png" />
+				<img src="img/second1.png" />
+				<img src="img/0.png" />
+				<img src="img/0.png" />
+			</div>
+		</div>
+		<script>
+			const imgs = document.querySelectorAll(".box img");
+			
+			time();
+			setInterval(time,1000/6);
+			
+			function time(){
+				let myTime = new Date();
+				let H = toTwoChars(myTime.getHours());
+				let M = toTwoChars(myTime.getMinutes());
+				let S = toTwoChars(myTime.getSeconds());
+				let str = H+':'+M+':'+S;
+				for(let i=0;i<str.length;i++){
+					if( i!=2 && i!=5 ){
+						imgs[i].src = `img/${str[i]}.png`;
+					}
+				}
+			}
+			
+			function toTwoChars(n){
+				return n<10 ? '0'+n : ''+n;
+			}
+		</script>
+	</body>
+</html>
