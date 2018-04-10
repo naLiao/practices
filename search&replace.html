@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				font-family: "微软雅黑";
+				background: #E8E7EF;
+			}
+			.warp{
+				width: 600px;
+				height: 600px;
+				margin: 0 auto;
+				padding-top: 20px;
+				/*border: solid 1px #000;*/
+			}
+			.container{
+				width: 600px;
+				height: 510px;
+				box-sizing: border-box;
+				border-radius: 10px;
+				background: #FFF;
+				box-shadow: 0px 1px 3px #0000FF;
+				padding: 30px;
+			}
+			.text{
+				width: 100%;
+				height: 300px;
+				font-family: "微软雅黑";
+				box-sizing: border-box;
+				line-height: 30px;
+				overflow: scroll;
+				font-size: 14px;
+				color: #4D4D4D;
+				border: solid 1px #8C89B6;
+				background: #EEEEEE;
+				padding: 20px;
+			}
+			.fold{
+				width: 120px;
+				height: 30px;
+				margin-top: 10px;
+				text-align: center;
+				line-height: 30px;
+				font-size: 16px;
+				color: #FFF;
+				background: #00BFFF;
+				cursor: pointer;
+			}
+			.open{
+				width: 100%;
+				height: 120px;
+				margin-top: 10px;
+				transition: 500ms;
+				position: relative;
+				opacity: 0;
+			}
+			.open textarea{
+				width: 235px;
+				height: 50px;
+			}
+			.noResult{
+				background: #FFF776;
+			}
+			.tip{
+				font-size: 12px;
+				color: #FFA500;
+				transition: 500ms;
+				opacity: 0;
+			}
+			.btns{
+				position: absolute;
+				left: 0;
+				bottom: 0px;
+			}
+			.btns button{
+				width: 120px;
+				height: 30px;
+				text-align: center;
+				border: none;
+				line-height: 30px;
+				font-size: 16px;
+				color: #FFF;
+				background: #5F9EA0;
+				margin-right: 10px;
+				cursor: pointer;
+			}
+			.highlight{
+				font-style: italic;
+				border: solid 1px #0000FF;
+			}
+			.active{
+				background: #FFF776;
+			}
+			.highlight2{
+				font-style: italic;
+				border: solid 1px #0000FF;
+				background: #0000FF;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div class="container">
+				<div class="text">JavaScript是世界上最流行的脚本语言，因为你在电脑、手机、平板上浏览的所有的网页，以及无数基于HTML5的手机App，交互逻辑都是由JavaScript驱动的。简单地说，JavaScript是一种运行在浏览器中的解释型的编程语言。那么问题来了，为什么我们要学JavaScript？尤其是当你已经掌握了某些其他编程语言如Java、C++的情况下。
+简单粗暴的回答就是：因为你没有选择。在Web世界里，只有JavaScript能跨平台、跨浏览器驱动网页，与用户交互。
+Flash背后的ActionScript曾经流行过一阵子，不过随着移动应用的兴起，没有人用Flash开发手机App，所以它目前已经边缘化了。相反，随着HTML5在PC和移动端越来越流行，JavaScript变得更加重要了。并且，新兴的Node.js把JavaScript引入到了服务器端，JavaScript已经变成了全能型选手。
+JavaScript一度被认为是一种玩具编程语言，它有很多缺陷，所以不被大多数后端开发人员所重视。很多人认为，写JavaScript代码很简单，并且JavaScript只是为了在网页上添加一点交互和动画效果。
+但这是完全错误的理解。JavaScript确实很容易上手，但其精髓却不为大多数开发人员所熟知。编写高质量的JavaScript代码更是难上加难。</div>
+				<div class="fold">展开  +</div>
+				<div class="open">
+					<textarea type="text" /></textarea>
+					<span>替换为</span>
+					<textarea type="text" /></textarea>
+					<span class="tip">123</span>
+					<div class="btns">
+						<button>查找</button>
+						<!--<button>查找/替换</button>-->
+						<button>全部替换</button>
+						<!--<button>全部替换</button>-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		const textMainBox = document.querySelector(".text");
+		const foldOpenBtn = document.querySelector(".fold");
+		const open = document.querySelector(".open");
+		const textLeft = open.querySelectorAll("textarea")[0];
+		const textRight = open.querySelectorAll("textarea")[1];
+		const tip = document.querySelector(".tip");
+		const btns = document.querySelectorAll(".btns button");
+		let textMain = textMainBox.innerHTML;
+		let index = 0;
+		let onOff = false;
+		var textLValue = textLeft.value;
+		
+		//展开收起开关
+		foldOpenBtn.onclick = function(){
+			if(!onOff){
+				open.style.opacity = 1;
+				textLeft.focus();
+				foldOpenBtn.innerHTML = '收起'
+			}else{
+				open.style.opacity = 0;
+				foldOpenBtn.innerHTML = '展开  +'
+			}
+			onOff = !onOff;
+		};
+		
+		//查找按钮
+		btns[0].onclick = function(){
+			var aI = textMainBox.getElementsByTagName('i');
+			//初始化
+			for(let i=0;i<aI.length;i++){
+				aI[i].classList.remove('highlight');
+				aI[i].classList.remove('active');
+			}
+			textLeft.classList.remove('noResult');
+			tip.style.opacity = 0;
+			let num = 0;
+			
+			if( textLValue != textLeft.value ){  //  给输入框里写了新的值，index重新置为0
+				index = 0;
+			}
+			panduan();
+			
+			
+			function panduan(){
+				textLValue = textLeft.value;
+				
+				if(!textLValue){  //  输入为空
+					textLeft.focus();
+					return;
+				}
+				if(  !textMain.includes(textLValue)  ){
+					textLeft.classList.add('noResult');  //搜索没有结果时输入框高亮
+				}
+				
+				//字符串变数组，再变回字符串
+				const arr = textMain.split(textLValue);
+				num = arr.length-1;
+				textMainBox.innerHTML = arr.join(`<i class="highlight">${textLValue}</i>`);
+					
+				//找到几个字符串，aI类数组的长度就是几
+				console.log(arr);
+				console.log(index);
+				if(index === aI.length) index = 0;
+				console.log(index);
+				aI[index++].classList.add('active');
+				
+				//显示提示
+				tip.innerHTML = `当前第${index}条,共找到${num}条`
+				tip.style.opacity = 1;
+			};
+			
+			
+			
+			
+		};
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//替换按钮
+		btns[1].onclick = function(){
+			let textLValue = textLeft.value;
+			let textRValue = textRight.value;
+			let num = 0;
+			
+			if(!textLValue){  //  输入为空
+				textLeft.focus();
+				return;
+			}
+			const arr = textMain.split(textLValue);
+			num = arr.length-1;
+			textMainBox.innerHTML = arr.join(`<i class="highlight2">${textRValue}</i>`);
+			//显示提示
+			tip.innerHTML = `共替换${num}条`
+			tip.style.opacity = 1;
+		};
+	</script>
+</html>
