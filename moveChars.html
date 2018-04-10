@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,button{
+				margin: 0;
+				padding: 0;
+			}
+			textarea{
+				outline:none;
+				resize:none;
+			}
+			button{
+				outline:none;
+				cursor: pointer;
+			}
+			html,body{
+				width: 100%;
+				height: 100%;
+			}
+			body{
+				background: #DDDDDD;
+			}
+			.container{
+				width: 800px;
+				height: 500px;
+				background: #5F9EA0;
+				position: absolute;
+				padding: 0 20px;
+				box-sizing: border-box;
+				border-radius: 10px;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-50%);
+			}
+			.left, .right{
+				width: 300px;
+				height: 400px;
+				background: #FFEBCD;
+				border-radius: 10px;
+				font-size: 14px;
+				line-height: 30px;
+				padding: 20px;
+				color: #5F9EA0;
+				box-sizing: border-box;
+				font-family: "微软雅黑";
+				
+			}
+			.btns button{
+				width: 110px;
+				height: 40px;
+				display: block;
+				line-height: 40px;
+				font-size: 14px;
+				background: #9ACD32;
+				border-radius: 10px;
+				border: none;
+				color: #FFF;
+				text-align: center;
+			}
+			.btns button:nth-of-type(2), .btns button:nth-of-type(3){
+				margin-top: 20px;
+			}
+			.count{
+				width: 100px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				font-size: 16px;
+				font-family: "arial, helvetica, sans-serif";
+				color: #00BFFF;
+				position: absolute;
+				top: 62%;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<textarea class="left">豫章故郡，洪都新府。&#10;星分翼轸，地接衡庐。&#10;襟三江而带五湖，控蛮荆而引瓯越。&#10;物华天宝，龙光射牛斗之墟；&#10;人杰地灵，徐孺下陈蕃之榻。&#10;雄州雾列，俊采星驰。</textarea>
+			<div class="btns">
+				<button>把文字右移</button>
+				<button>把文字左移</button>
+			</div>
+			<span class="count"></span>
+			<textarea class="right">JavaScript是世界上最流行的脚本语言，因为你在电脑、手机、平板上浏览的所有的网页，以及无数基于HTML5的手机App，交互逻辑都是由JavaScript驱动的。</textarea>
+		</div>
+	</body>
+	<script>
+		const leftBox = document.querySelector('.left');
+		const btns = document.querySelectorAll('.btns button');
+		const count = document.querySelector('.count');
+		const rightBox = document.querySelector('.right');
+		let timer = null;
+		let timer2 = null;
+		let onOff = false;  //  为true表示有定时器在跑，这时候两个按钮都不可点
+		
+		
+		
+		//文字右移
+		btns[0].onclick = function(){
+			moveFromTo( leftBox , rightBox );
+		}
+		//文字左移
+		btns[1].onclick = function(){
+			moveFromTo( rightBox , leftBox );
+		}
+		//左右文字互换
+		btns[2].onclick = function(){
+			//获取初始两侧输入框内容
+			let a = leftText = leftBox.value;
+			let b = rightText = rightBox.value;
+			let lenL = leftText.length;
+			let lenR = rightText.length;
+			
+			if(!leftText && !rightText) return;  //  如果两侧输入框都没有内容，直接退出
+			if(onOff) return;  //  如果定时器没有跑完，点击按钮没有作用
+
+			clearInterval(timer);
+			clearInterval(timer2);
+			
+			timer = setInterval( function(){
+				onOff = true;  //  定时器1开启，左到右，按钮进入不可点状态
+				if( lenL===0 ){
+					clearInterval(timer);
+					onOff = false;  // 定时器跑完了，按钮可点击了
+					return;
+				}
+				const arrL = leftText.split('');
+				const arrR = rightText.split('');
+				
+				leftText = arrL.slice(1).concat(arrR[0]).join('');
+				leftBox.value = leftText;
+				
+				lenL = lenL > 0 ? --lenL : 0;
+//				console.log(lenL);
+			}, 80)
+			
+			timer2 = setInterval( function(){  //  右到左
+				onOff = true;  //  定时器2开启，按钮进入不可点状态
+				if( lenR===0 ){
+					clearInterval(timer2);
+					onOff = false;  // 定时器跑完了，按钮可点击了
+					return;
+				}
+				const arrL = leftText.split('');
+				const arrR = rightText.split('');
+				
+				rightText = arrR.slice(1).concat(arrL[0]).join('');
+				rightBox.value = rightText;
+				
+				lenR = lenR > 0 ? --lenR : 0;
+				console.log(lenR);
+			}, 80)
+		}
+		
+		
+		function moveFromTo( fromBox , toBox ){
+			//获取初始左侧输入框内容
+			let fromText = fromBox.value;
+			let num = 0;
+			let len = fromText.length;
+			
+			if(!fromText) return;  //  如果源输入框没有内容，直接退出
+			if(onOff) return;  //  如果定时器没有跑完，点击按钮没有作用
+
+			clearInterval(timer);
+			timer = setInterval( function(){
+				onOff = true;  //  定时器开启，按钮进入不可点状态
+				if(fromText.length === 0){
+					clearInterval(timer);
+					onOff = false;  // 定时器跑完了，按钮可点击了
+					fromBox.focus();
+					return;
+				}
+				moveOneChar(fromText);
+			}, 80)
+			
+			function moveOneChar(str){
+				const arr = str.split('');
+				toBox.value += arr[0];
+				fromBox.value = fromText = arr.slice(1).join('');
+				count.innerHTML = `${++num}/${len}`;
+			};
+		}
+	</script>
+</html>
