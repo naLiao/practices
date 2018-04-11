@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			input, button{
+				outline: none;
+				border: none;
+			}
+			body{
+				background: #B2A9C8;
+			}
+			.warp{
+				width: 80%;
+				height: 300px;
+				background: #DDDDDD;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				border-radius: 10px;
+			}
+			.textbtnBox{
+				width: 375px;
+				position: absolute;
+				left: 50%;
+				top: 20%;
+				transform: translateX(-50%);
+			}
+			.text{
+				width: 240px;
+				height: 40px;
+				background: #9A4E79;
+				line-height: 40px;
+				font-size: 22px;
+				color: #FFF;
+				border: none;
+				box-sizing: border-box;
+				padding: 0 20px;
+				border-radius: 10px;
+			}
+			.btn{
+				width: 120px;
+				height: 40px;
+				margin-left: 10px;
+				text-align: center;
+				line-height: 40px;
+				font-size: 18px;
+				border: none;
+				color: #FFF;
+				background: #5F9EA0;
+				border-radius: 10px;
+			}
+			.box{
+				width: 60%;
+				height: 100px;
+				background: #000;
+				position: absolute;
+				left: 20%;
+				top: 46%;
+				border: solid 3px #FFA500;
+				color: #999;
+				line-height: 100px;
+				text-align: center;
+				font-size: 40px;
+				border-radius: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div class="textbtnBox">
+				<input class="text" type="text" />
+				<button class="btn">开始倒计时</button>
+			</div>
+			<div class="box"></div>
+		</div>
+		<script>
+		const box = document.querySelector(".box");
+		const text = document.querySelector(".text");
+		const btn = document.querySelector(".btn");
+		let timer = null;
+		
+		text.value = '2018-4-12,12:00:00';
+		text.focus();
+		
+		btn.onclick = function(){
+			let deadline = new Date(text.value);
+			countDown(deadline);
+			clearInterval(timer);
+			timer = setInterval(function(){
+				countDown(deadline);
+			},1000);
+			
+			function countDown(ttt){
+				let now = new Date;
+				let t = (ttt - now)/1000;
+				if( t < 0 ){
+					clearInterval(timer);
+					t=0;
+				}
+				let leftDay = Math.floor(t/86400);
+				let leftHours = Math.floor(t%86400/3600);
+				let leftMInutes = Math.floor(t%86400%3600/60);
+				let leftSeconds = Math.floor(t%86400%3600%60);
+				
+				let str = `${leftDay} 天  ${leftHours}  时  ${leftMInutes} 分   ${leftSeconds} 秒`;
+				box.innerHTML = str;
+			}
+		};
+		
+		
+		
+		
+		</script>
+	</body>
+</html>
