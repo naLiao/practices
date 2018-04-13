@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.warp{
+				height: 100px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				border: solid 3px #FFA500;
+				background: #000;
+				display: flex;
+				align-items: center;
+				box-sizing: border-box;
+				padding: 50px;
+			}
+			.box{
+				width: 360px;
+				height: 61px;
+				margin: 0 auto;
+				overflow: hidden;
+				position: relative;
+			}
+			.box span{
+				width: 45px;
+				height: 61px;
+				display: inline-block;
+				position: absolute;
+			}
+			.box span:nth-of-type(3), .box span:nth-of-type(6){
+				width: 20px;
+				height: 61px;
+				margin: 5px 0 0 12px;
+				display: inline-block;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div class="box"></div>
+		</div>
+		<script src="timeBasedMove.js"></script>
+		<script src="tween.js"></script>
+		<script>
+			//生成html结构
+			const box = document.querySelector(".box");
+			const arr = ['img/0.png','img/1.png','img/2.png','img/3.png','img/4.png','img/5.png','img/6.png','img/7.png','img/8.png','img/9.png']
+			let strText = '';
+			let strTime = '';
+			let strTime2 = '';
+			let strTime3 = '';
+			for(let i =0;i<8;i++){
+				strText += `<span style="left:${i*45}px"><img><img></span>`;
+			}
+			box.innerHTML = strText;
+			
+			const aSpan = document.querySelectorAll("span");
+			
+			//两个冒号图片引用不变，放在定时器外面
+			aSpan[2].innerHTML = `<img src="img/second1.png" />`;
+			aSpan[5].innerHTML = `<img src="img/second1.png" />`;
+			
+			//每一秒新获取一次时间字符串
+			time();
+			setInterval(time,1000);
+			
+			function time(){
+				//获得当前时间字符串，格式：13:54:08 
+				let myTime = new Date(+new Date -1000);
+				let myTime2 = new Date();
+				let myTime3 = new Date(+new Date +1000);
+				function timeToString(t){
+					let H = toTwoChars(t.getHours());
+					let M = toTwoChars(t.getMinutes());
+					let S = toTwoChars(t.getSeconds());
+					return H+':'+M+':'+S;
+				}
+				strTime = timeToString(myTime);
+				strTime2 = timeToString(myTime2);
+				strTime3 = timeToString(myTime3);
+				
+				//给span里的图片加引用地址
+				for(let i=0;i<aSpan.length;i++){
+					if(i!=2 && i!=5){
+						const imgs = aSpan[i].getElementsByTagName('img');
+						imgs[0].src = arr[strTime[i]];
+						imgs[1].src = arr[strTime2[i]];
+					}
+				}
+				
+				//每次移动这一秒和下一秒时间字符串不一样的地方
+				for(let i=0;i<strTime.length;i++){
+					if( strTime[i] != strTime2[i] ){
+						moveNumber(aSpan[i],i);
+					}
+				}
+				
+				//两个冒号一秒闪一次
+				move({
+					ele:aSpan[2],
+					attr:{
+						opacity:0
+					},
+					d:200,
+					callback:function(){
+						move({
+							ele:aSpan[2],
+							attr:{
+								opacity:1
+							},
+							d:200
+						})
+					}
+				})
+				
+				move({
+					ele:aSpan[5],
+					attr:{
+						opacity:0
+					},
+					d:200,
+					callback:function(){
+						move({
+							ele:aSpan[5],
+							attr:{
+								opacity:1
+							},
+							d:200
+						})
+					}
+				})
+				
+			}
+			
+			function moveNumber(obj,index){
+					const imgs = obj.getElementsByTagName('img');
+					//1.整体往上移动一格
+					move({
+						ele:obj,
+						attr:{
+							top: -61
+						},
+						d:600,
+						callback:function(){
+							//2.改变上面图片的引用
+							imgs[0].src = arr[strTime2[index]];
+							//3.再快速往下拉一格
+							move({
+								ele:obj,
+								attr:{
+									top: 0
+								},
+								d:1
+							})
+							//4.改变下面图片的引用
+							imgs[1].src = arr[strTime3[index]];
+						}
+					})
+				}
+		</script>
+	</body>
+</html>
