@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Calendar for 2018</title>
+		<style>
+			body,div,h2,h6,ul{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			body{
+				font-family: arial;
+				text-align: center;
+			}
+			body,html{
+				width: 100%;
+				height: 100%;
+			}
+			.container{
+				box-sizing: border-box;
+				padding: 20px;
+				background: #DDDDDD;
+			}
+			.container .y2018{
+				font-size: 48px;
+				color: #E27089;
+				line-height: 80px;
+				margin-bottom: 30px;
+			}
+			#mainBoxs{
+				overflow: hidden;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-around;
+			}
+			.box{
+				width: 300px;
+				height: 340px;
+				background: #878787;
+				box-sizing: border-box;
+				padding: 10px;
+				margin: 10px;
+				float: left;
+			}
+			.activeMonth{
+				background: #5F9EA0;
+			}
+			.month{
+				font-size: 30px;
+				line-height: 50px;
+				color: #FFF;
+				font-weight: 100;
+				
+			}
+			.week{
+				display: flex;
+				align-items: center;
+				justify-content:space-around;
+			}
+			.week li, .day li{
+				width: 40px;
+				height: 40px;
+				line-height: 40px;
+				color:rgba(255,255,255,0.6);
+			}
+			.day li{
+				color: #FFF;
+				float: left;
+			}
+			.day li.weekend{
+				color: #f47872;
+			}
+			.day li.active{
+				background: #fadc79;
+				font-weight: bold;
+				border-radius: 6px;
+				color: #FFF;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h2 class="y2018">2018</h2>
+			<div id="mainBoxs">
+			</div>
+		</div>
+		<script>
+			const container = document.querySelector(".container");
+			const mainBox = document.querySelector("#mainBoxs");
+			
+			const arrMonth = ['Jan','Feb','Mar','Apr','May','Jue','Jul','Aug','Sep','Oct','Nov','Dec'];
+			
+			//生成12个月
+			for(let i=0;i<12;i++){
+				mainBox.innerHTML += `<div class="box">
+										<h6 class="month">${arrMonth[i]}</h6>
+										<ul class="week">
+											<li>Mon</li>
+											<li>Tue</li>
+											<li>Wed</li>
+											<li>Thu</li>
+											<li>Fri</li>
+											<li>Sat</li>
+											<li>Sun</li>
+										</ul>
+										<ul class="day">
+										</ul>
+									</div>`;
+			}
+			
+			const boxs = document.querySelectorAll(".box");
+			const dayBoxs = document.querySelectorAll(".box .day");
+			//获取2018年每个月有多少天，就生成多少个li
+			for(let i=0;i<12;i++){
+				let str = '';
+				let d1 = new Date();
+				d1.setFullYear(2018);
+				d1.setMonth(i+1);
+				d1.setDate(0)
+				let count = d1.getDate(0);
+				
+				d1.setMonth(i);
+				for(let j=1;j<=count;j++){
+					d1.setDate(j);
+					if(d1.getDay() == 6 || d1.getDay() == 0){
+						str += `<li class="weekend">${j}</li>`;
+					}else{
+						str += `<li>${j}</li>`;
+					}
+				}
+				dayBoxs[i].innerHTML = str;
+				
+			}
+			
+			//获取当前日期，加active样式
+			let d3 = new Date();
+			let nowMonth = d3.getMonth()+1;
+			let nowDate = d3.getDate();
+			const lis = dayBoxs[nowMonth-1].querySelectorAll("li");
+			lis[nowDate-1].classList.add('active');
+			
+			for(let i=nowMonth;i<=12;i++){
+				boxs[i-1].classList.add('activeMonth');
+			}
+			
+			
+			//获取2018年每个月1号是星期几，加相应的空格
+			for(let i=0;i<12;i++){
+				let str = '';
+				let d2 = new Date();
+				d2.setFullYear(2018);
+				d2.setMonth(i);
+				d2.setDate(1)
+				let n = d2.getDay();
+				n = n==0? 7 : n;
+				for(let j=1;j<n;j++){
+					str += `<li></li>`;
+				}
+				dayBoxs[i].innerHTML = str + dayBoxs[i].innerHTML;
+			}
+			
+			//当前日期之前的
+			
+		</script>
+	</body>
+</html>
