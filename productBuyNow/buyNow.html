@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="buyNow.css"/>
+</head>
+<body>
+	<header><a href="javascript:;" id="logo"></a></header>
+	<div id="container" class="clear">
+		<div class="box">
+			<div class="header">
+				<input class="time" value="2018 04 18 15:00:00">
+				<span class="btn">确定</span>
+			</div>
+			<div class="content">
+				<div class="countdown">
+					<span class="text">剩余</span>
+					<span class="number">0</span>
+					<span class="number">0</span>
+					<span class="point">:</span>
+					<span class="number">0</span>
+					<span class="number">9</span>
+					<span class="point">:</span>
+					<span class="number">4</span>
+					<span class="number">0</span>
+				</div>
+				<a href="javascript:;" class="thumbnail">
+					<img src="img/goods_1.png">
+				</a>
+				<p class="name">iphone7s plus 酷炫手机</p>
+				<p class="price-text">
+					抢购价：
+					<span class="price">￥8000</span>
+				</p>
+			</div>
+			<div class="mask"></div>
+			<div class="sold-out-img"></div>
+		</div>
+		<div class="box">
+			<div class="header">
+				<input class="time" value="2018 04 13 15:00:00">
+				<span class="btn">确定</span>
+			</div>
+			<div class="content">
+				<div class="countdown">
+					<span class="text">剩余</span>
+					<span class="number">0</span>
+					<span class="number">0</span>
+					<span class="point">:</span>
+					<span class="number">0</span>
+					<span class="number">9</span>
+					<span class="point">:</span>
+					<span class="number">4</span>
+					<span class="number">0</span>
+				</div>
+				<a href="javascript:;" class="thumbnail">
+					<img src="img/goods_2.png">
+				</a>
+				<p class="name">27 英寸配备 Retina 5K显示屏</p>
+				<p class="price-text">
+					抢购价：
+					<span class="price">￥15999</span>
+				</p>
+			</div>
+			<div class="mask"></div>
+			<div class="sold-out-img"></div>
+		</div>
+		<div class="box">
+			<div class="header">
+				<input class="time" value="2018 04 13 15:00:00">
+				<span class="btn">确定</span>
+			</div>
+			<div class="content">
+				<div class="countdown">
+					<span class="text">剩余</span>
+					<span class="number">0</span>
+					<span class="number">0</span>
+					<span class="point">:</span>
+					<span class="number">0</span>
+					<span class="number">9</span>
+					<span class="point">:</span>
+					<span class="number">4</span>
+					<span class="number">0</span>
+				</div>
+				<a href="javascript:;" class="thumbnail">
+					<img src="img/goods_3.png">
+				</a>
+				<p class="name">魅族、锤子、小米 "集"群</p>
+				<p class="price-text">
+					抢购价：
+					<span class="price">￥20000</span>
+				</p>
+			</div>
+			<div class="mask"></div>
+			<div class="sold-out-img"></div>
+		</div>
+		<div class="box">
+			<div class="header">
+				<input class="time" value="2018 04 13 15:00:00">
+				<span class="btn">确定</span>
+			</div>
+			<div class="content">
+				<div class="countdown">
+					<span class="text">剩余</span>
+					<span class="number">0</span>
+					<span class="number">0</span>
+					<span class="point">:</span>
+					<span class="number">0</span>
+					<span class="number">0</span>
+					<span class="point">:</span>
+					<span class="number">0</span>
+					<span class="number">0</span>
+				</div>
+				<a href="javascript:;" class="thumbnail">
+					<img src="img/goods_4.png">
+				</a>
+				<p class="name">iWatch 智能手表不智能</p>
+				<p class="price-text">
+					抢购价：
+					<span class="price">￥5000</span>
+				</p>
+			</div>
+			<div class="mask"></div>
+			<div class="sold-out-img"></div>
+		</div>
+
+	</div>
+
+	<table id="list">
+		<thead>
+			<tr>
+				<th>商品</th>
+				<th>价钱</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>总计</td>
+				<td class="totalPrice"></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+<script src="personal.js"></script>
+<script>
+	const boxs = document.querySelectorAll(".box");
+	const btns = document.querySelectorAll('.box .btn');
+	const tBody = document.querySelector('#list tBody');
+	const totalPrice = tBody.querySelector(".totalPrice");
+	let priceNum = 0;
+	
+	
+	for(let i=0;i<boxs.length;i++){
+		boxs[i].onOff = true;
+		boxs[i].onclick = function(){
+			clearInterval(boxs[i].timer);
+			
+			countDown(boxs[i]);
+			boxs[i].timer = setInterval(function(){
+				countDown(boxs[i]);
+			},1000)
+		};
+	}
+	
+	//计算还剩下多少时间，并对应到数字显示
+	function countDown(obj){
+				//根据系统时间开始倒计时，实际项目中要获取服务器时间
+				let setT = new Date(obj.querySelector('.time').value);
+				let nowT = new Date;
+				let t = (setT - nowT)/1000;
+				//倒计时到0时停止倒计时
+				if( t <= 0 ){
+					clearInterval(obj.timer);
+					t=0;
+					if(!obj.onOff){
+						return;
+					}
+					obj.onOff = false;
+					//倒计时到0时，需要加戳，戳由大变小
+					const soldOutImg = obj.querySelector('.sold-out-img');
+					soldOutImg.style.display = 'block';
+					soldOutImg.style.transition = 'none';
+					soldOutImg.style.transform = 'scale(2)';
+					soldOutImg.style.transition = '500ms';
+					
+					setTimeout(function(){
+						soldOutImg.style.transform = 'scale(1)';
+					},17);
+					
+					//显示黑色遮罩层
+					setTimeout(function(){
+						const mask = obj.querySelector('.mask');
+						mask.style.transition = '1s 1s ease-in';
+						mask.style.display = 'block';
+						//box抖动
+						shake(obj,'left');
+					},500);
+					
+					
+					//用创建元素方法向表格中添加下架商品名称、价钱、图片
+					let productName = obj.querySelector('.name').innerHTML;
+					let price = obj.querySelector('.price').innerHTML;
+					let productImg = obj.querySelector('img').getAttribute('src');
+					let tr = document.createElement('tr');
+					let td1 = document.createElement('td');
+					td1.innerHTML = productName;
+					let td2 = document.createElement('td');
+					td2.innerHTML = price;
+					let td3 = document.createElement('td');
+					let img1 = document.createElement('img');
+					img1.src = productImg
+					td3.appendChild(img1);
+					tr.appendChild(td1);
+					tr.appendChild(td2);
+					tr.appendChild(td3);
+					tBody.insertBefore(tr,tBody.children[0]);
+
+					//计算总价显示
+					priceNum += parseFloat(price.substr(1));
+					totalPrice.innerHTML = '￥' + priceNum;
+					
+				}
+				
+				//计算剩余时间字符串
+				let leftHours = Math.floor(t%86400/3600);
+				let leftMInutes = Math.floor(t%86400%3600/60);
+				let leftSeconds = Math.floor(t%86400%3600%60);
+				let str = toTwo(leftHours) + toTwo(leftMInutes) + toTwo(leftSeconds);
+				let numberBoxs = obj.querySelectorAll('.number');
+				
+				//将剩余时间字符串与显示框对应
+				for(let i=0;i<str.length;i++){
+					numberBoxs[i].innerHTML = str[i];
+				}
+			}
+	
+</script>
+
+</body>
+</html>
