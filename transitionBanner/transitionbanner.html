@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,ul{
+				margin: 0;
+				padding: 0;
+			}
+			a{
+				text-decoration: none;
+			}
+			li{
+				list-style: none;
+			}
+			.box{
+				width: 447px;
+				height: 245px;
+				position: relative;
+				margin-left: 447px;
+				overflow: hidden;
+			}
+			.banner{
+				height: 245px;
+				position: absolute;
+			}
+			.banner li{
+				float: left;
+				width: 447px;
+				height: 245px;
+			}
+			#prev, #next{
+				width: 60px;
+				line-height: 60px;
+				font-size: 60px;
+				color: #FFF;
+				position: absolute;
+				top: 38%;
+				text-align: center;
+				z-index: 11;
+			}
+			#prev{
+				left: 0;
+			}
+			#next{
+				right: 0;
+			}
+			#prev:hover, #next:hover{
+				background: rgba(40,40,40,.6);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<a href="javascript:;" id="prev"><</a>
+			<ul class="banner">
+				<li><img src="img/1.jpg"/></li>
+				<li><img src="img/2.jpg"/></li>
+			</ul>
+			<a href="javascript:;" id="next">></a>
+		</div>
+		<script src="personal.js"></script>
+		<script>
+			const banner = document.querySelector(".banner");
+			const imgs = document.querySelectorAll(".banner img");
+			const lis = document.querySelectorAll("li");
+			const next = document.getElementById('next');
+			banner.style.width = (447*lis.length) + 'px';
+			let num = 1;
+			
+			next.onclick = function(){
+				num = num==4 ? 1 : ++num;
+				banner.style.transition = '500ms';
+				banner.style.transform = 'translateX(-447px)';
+				
+				setTimeout(function(){
+					imgs[0].src = 'img/'+ num +'.jpg';
+					banner.style.transition = 'none';
+					banner.style.transform = 'translateX(0)';
+					imgs[1].src = 'img/'+ ((num+1)==5 ? 1 : (num+1)) +'.jpg';
+				},508)
+			};
+			
+			prev.onclick = function(){
+				num = num==1 ? 4 : --num;
+				imgs[0].src = 'img/'+ num +'.jpg';
+				imgs[1].src = 'img/'+ ((num+1)==5 ? 1 : (num+1)) +'.jpg';
+				banner.style.transition = 'none';
+				banner.style.transform = 'translateX(-447px)';
+				setTimeout(function(){
+					banner.style.transition = '500ms';
+					banner.style.transform = 'translateX(0)';
+				},18)
+			};
+		</script>
+	</body>
+</html>
