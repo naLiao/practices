@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,div,ul{
+				margin: 0;
+				padding: 0;
+			}
+			a{
+				text-decoration: none;
+			}
+			li{
+				list-style: none;
+			}
+			.box{
+				width: 447px;
+				height: 245px;
+				position: relative;
+				margin-left: 447px;
+				overflow: hidden;
+			}
+			.banner{
+				height: 245px;
+				position: absolute;
+			}
+			.banner li{
+				float: left;
+				width: 447px;
+				height: 245px;
+			}
+			#prev, #next{
+				width: 60px;
+				line-height: 60px;
+				font-size: 60px;
+				color: #FFF;
+				position: absolute;
+				top: 38%;
+				text-align: center;
+				z-index: 111;
+			}
+			#prev{
+				left: 0;
+			}
+			#next{
+				right: 0;
+			}
+			#prev:hover, #next:hover{
+				background: rgba(40,40,40,.6);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<a href="javascript:;" id="prev"><</a>
+			<ul class="banner">
+				<li><img src="img/1.jpg"/></li>
+				<li><img src="img/2.jpg"/></li>
+				<li><img src="img/3.jpg"/></li>
+				<li><img src="img/4.jpg"/></li>
+			</ul>
+			<a href="javascript:;" id="next">></a>
+		</div>
+		<script src="personal.js"></script>
+		<script>
+			const banner = document.querySelector(".banner");
+			banner.innerHTML += banner.innerHTML;
+			const imgs = document.querySelectorAll(".banner img");
+			const lis = document.querySelectorAll("li");
+			const prev = document.getElementById('prev');
+			const next = document.getElementById('next');
+			banner.style.width = (447*lis.length) + 'px';
+			let num = 0;
+			
+			next.onclick = function(){
+				num = ++num%lis.length;
+				
+				//如果最后一张时点击下一张，迅速移动到第一组最后一张，再慢移到第二组第一张
+				if(num==0){
+					num=lis.length/2;
+					move({
+						ele:banner,
+						attr:{
+							left:-447*(lis.length/2-1)
+						},
+						d:1,
+						callback:function(){
+							move({
+								ele:banner,
+								attr:{
+									left:-447*(lis.length/2)
+								},
+								d:500
+							})
+						}
+					})
+				}
+				else{
+					move({
+						ele:banner,
+						attr:{
+							left:-447*num
+						},
+						d:500
+					});
+				}
+				console.log(num);
+			};
+			
+			prev.onclick = function(){
+				num--;
+				//如果第一张时点击上一张，迅速移动到第二组第一张，再慢移到第一组最后一张
+				if(num==-1){
+					num=lis.length/2-1;
+					move({
+						ele:banner,
+						attr:{
+							left:-447*(lis.length/2)
+						},
+						d:1,
+						callback:function(){
+							move({
+								ele:banner,
+								attr:{
+									left:-447*(lis.length/2-1)
+								},
+								d:500
+							})
+						}
+					})
+				}
+				else{
+					move({
+						ele:banner,
+						attr:{
+							left:-447*num
+						},
+						d:500
+					});
+				}
+//				console.log(num);
+			};
+		</script>
+	</body>
+</html>
