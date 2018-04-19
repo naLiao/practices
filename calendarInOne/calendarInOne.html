@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body, div, ul{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				text-align: center;
+			}
+			li{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			select, button{
+				border: none;
+				outline: none;
+			}
+			html,body{
+				width: 100%;
+				height: 100%;
+			}
+			.container{
+				width: 700px;
+				height: 480px;
+				margin: 0 auto;
+				background: #63B1FF;
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			.main{
+				width: 450px;
+				height: 476px;
+				background: #FFF;
+				position: absolute;
+				left: 2px;
+				top: 2px;
+				padding: 0 10px 10px 10px;
+				box-sizing: border-box;
+			}
+			.title{
+				height: 50px;
+				display: flex;
+				align-items: center;
+				border-bottom: solid 1px #63B1FF;
+			}
+			.year, .month, #backToToday{
+				width: 100px;
+				height: 30px;
+				border: solid 1px #00BFFF;
+				font-size: 16px;
+				box-sizing: border-box;
+				padding-left: 10px;
+			}
+			#backToToday{
+				margin-left: 10px;
+				background: #F6F5F6;
+				cursor: pointer;
+			}
+			#backToToday:hover{
+				background: #DDDDDD;
+			}
+			.week{
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border-bottom: solid 1px #EEE;
+				margin-bottom: 10px;
+			}
+			.week li{
+				width: 60px;
+				height: 40px;
+				display: inline-block;
+				line-height: 40px;
+			}
+			.week li:nth-last-of-type(1), .week li:nth-last-of-type(2){
+				color: #E27089;
+			}
+			.dayBox{
+				width: 100%;
+			}
+			.dayBox li{
+				width: 61px;
+				height: 60px;
+				display: block;
+				font-size: 20px;
+				color: #333;
+				line-height: 50px;
+				float: left;
+				box-sizing: border-box;
+				/*background: red;*/
+				cursor: pointer;
+				position: relative;
+			}
+			.dayBox li span{
+				height: 12px;
+				line-height: 12px;
+				font-size: 12px;
+				position: absolute;
+				bottom: 5px;
+				left: 20px;
+			}
+			.dayBox li:hover{
+				border: solid 2px #FFA500;
+			}
+			.dayBox li.weekend{
+				color: #E27089;
+			}
+			.dayBox li.active{
+				background: #FFBB00;
+				color: #FFF;
+			}
+			.dayBox li.active:hover{
+				border: none;
+				background: #FFBB00;
+				color: #FFF;
+			}
+			.dayBox li.lastMonth{
+				color: #E5E5E5;
+			}
+			.right{
+				width: 200px;
+				height: 476px;
+				position: absolute;
+				top: 2px;
+				left: 475px;
+			}
+			.date{
+				line-height: 80px;
+				color: #FFF;
+			}
+			.today{
+				width: 100px;
+				height: 100px;
+				background: #FFBB00;
+				border-radius: 8px;
+				line-height: 100px;
+				margin-left: 50px;
+				font-size: 40px;
+				color: #FFF;
+			}
+			.time{
+				line-height: 100px;
+				color: #FFF;
+                margin-bottom: 20px;
+				font-size: 36px;
+			}
+			#prev, #next{
+				height: 30px;
+				line-height: 28px;
+				font-size: 20px;
+				display: inline-block;
+				border: solid 1px #00BFFF;
+				box-sizing: border-box;
+				padding: 0 5px;
+			}
+			#prev{
+				margin-left: 10px;
+				border-right: none;
+			}
+			#next{
+				border-left: none;
+			}
+			#prev:hover, #next:hover{
+				background: #DDDDDD;
+			}
+			.lunar{
+                font-size: 20px;
+                color: #FFF;
+                height: 40px;
+            }
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="main">
+				<div class="title">
+					<select class="year" onchange="yearchange()">
+						<option value="2016年">2016年</option>
+						<option value="2017年">2017年</option>
+						<option selected="true" value="2018年">2018年</option>
+						<option value="2019年">2019年</option>
+						<option value="2020年">2020年</option>
+					</select>
+					<a id="prev" href="#"><</a>
+					<select class="month" onchange="monthchange()">
+						<option value="1月">1月</option>
+						<option value="2月">2月</option>
+						<option value="3月">3月</option>
+						<option selected="true" value="4月">4月</option>
+						<option value="5月">5月</option>
+						<option value="6月">6月</option>
+						<option value="7月">7月</option>
+						<option value="8月">8月</option>
+						<option value="9月">9月</option>
+						<option value="10月">10月</option>
+						<option value="11月">11月</option>
+						<option value="12月">12月</option>
+					</select>
+					<a id="next" href="#">></a>
+					<button id="backToToday">返回今天</button>
+				</div>
+				<ul class="week">
+					<li>一</li>
+					<li>二</li>
+					<li>三</li>
+					<li>四</li>
+					<li>五</li>
+					<li>六</li>
+					<li>日</li>
+				</ul>
+				<ul class="dayBox">
+				</ul>
+			</div>
+			<div class="right">
+				<div class="date"></div>
+				<div class="today"></div>
+				<div class="time"></div>
+				<div class="lunar"><span id="lunarYear"></span>年</div>
+                <div class="lunar"><span id="lunarMonth"></span><span id="lunarDate"></span></div>
+			</div>
+		</div>
+	<script src="personal.js"></script>
+    <script src="lunar.js"></script>
+	<script>
+        const year = document.querySelector(".year");
+        const month = document.querySelector(".month");
+		const dayBox = document.querySelector(".dayBox");
+		const dateBox = document.querySelector(".date");
+		const todayBox = document.querySelector(".today");
+		const timeBox = document.querySelector(".time");
+		const backToToday = document.getElementById('backToToday');
+		const prev = document.getElementById('prev');
+        const lunarYear = document.getElementById('lunarYear');
+        const lunarMonth = document.getElementById('lunarMonth');
+        const lunarDate = document.getElementById('lunarDate');
+
+		//存储当前年、当前月、当前日期和周几
+		let d = new Date;
+		const nowYear = d.getFullYear();
+        const nowMonth = d.getMonth()+1;
+        const nowDate = d.getDate();
+        //初始化
+		setTime(nowYear,nowMonth,nowDate);
+        //返回今天
+        backToToday.onclick = function(){
+            setTime(nowYear,nowMonth,nowDate);
+        }
+
+        let setYearNum = nowYear;
+        let setMonthNum = nowMonth;
+        //年份的切换
+        function yearchange() {
+            for(let i=0;i<year.options.length;i++){
+                let _option = year.options[i];
+                if(_option.selected){
+                    setYearNum = parseInt(_option.value);
+                    setTime(setYearNum,setMonthNum,nowDate);
+                }
+            }
+        }
+        //月份的切换
+        function monthchange() {
+            for(let i=0;i<month.options.length;i++){
+                let _option = month.options[i];
+                if(_option.selected){
+                    setMonthNum = parseInt(_option.value);
+                    setTime(setYearNum,setMonthNum,nowDate);
+                }
+            }
+        }
+
+        next.onclick = function () {
+            for(let i=0;i<month.options.length;i++){
+                // month.options[3].selected = true;
+                if(month.options[i].selected){
+                    i = i==11 ? 11 : ++i;
+                    month.options[i].selected = true;
+                    console.log(i);
+                }
+            }
+            setMonthNum++;
+            if(setMonthNum==13) setMonthNum=12;
+            setTime(setYearNum,setMonthNum,nowDate);
+        }
+
+        prev.onclick = function () {
+            for(let i=0;i<month.options.length;i++){
+                if(month.options[i].selected){
+                    if(i==0) {
+                        month.options[0].selected = true;
+                    }else{
+                        month.options[i-1].selected = true;
+                    }
+                }
+            }
+            setMonthNum--;
+            if(setMonthNum==0) setMonthNum=1;
+            setTime(setYearNum,setMonthNum,nowDate);
+        }
+
+        //右侧第二行当前时间，不随点击改变
+        time();
+        setInterval(time,1000);
+
+		//根据传入的时间配置li
+		function setTime(setYear,setMonth,setday){
+			//获取当月有多少天，添加相应数量的li，周末为红色
+			let di = new Date;
+			di.setFullYear(setYear);
+			di.setMonth(setMonth);  //下个月
+			di.setDate(0);  //当月最后一天
+			let count = di.getDate();
+			di.setMonth(setMonth-1);  //当月
+			let str = '';
+			for(let i=1;i<=count;i++){
+				di.setDate(i);
+				if(di.getDay()==6 || di.getDay()==0){
+					str += `<li class="weekend">${i}<span>${calendar.solar2lunar(di.getFullYear(),di.getMonth()+1,di.getDate()).IDayCn}</span></li>`;
+				}else{
+					str += `<li>${i}<span>${calendar.solar2lunar(di.getFullYear(),di.getMonth()+1,di.getDate()).IDayCn}</span></li>`;
+				}
+			}
+
+			//生成dayBox里的上个月的li
+			di.setMonth(setMonth-1);  //当月
+			di.setDate(1);  //1号
+			let kongbai = di.getDay()==0 ? 6 : di.getDay()-1;  //获取当月1号是周几，前面就放周几减1个空白
+			di.setDate(0);  //上个月最后一天
+			let prevCount = di.getDate();  //获取上个月有多少天
+            di.setMonth(setMonth-2);  //上个月
+			for(let i=1;i<=kongbai;i++){
+			    di.setDate(prevCount);
+                prevCount--;
+				str = `<li class="lastMonth">${di.getDate()}<span>${calendar.solar2lunar(di.getFullYear(),di.getMonth()+1,di.getDate()).IDayCn}</span></li>` + str;
+			}
+			dayBox.innerHTML = str;
+			
+			//右侧第一行年月日星期几
+			let di2 = new Date;
+            di2.setFullYear(setYear);
+            di2.setMonth(setMonth-1);
+            di2.setDate(setday);
+			right(di2);  //right函数将时间对象对应到右侧显示
+			
+			//给当月的每个li添加点击事件，点击当月某一天，跳转到该天
+			const dayLis = dayBox.getElementsByTagName("li");
+			let num = setday + kongbai;
+			dayLis[num-1].classList.add('active');  //默认当日选中状态
+			let prev = dayLis[num-1];
+			for(let i=kongbai;i<dayLis.length;i++){
+			    // console.log(i);
+				dayLis[i].onclick = function(){
+					let di3 = new Date;
+                    di3.setFullYear(setYear);
+                    di3.setMonth(setMonth-1);
+					di3.setDate(i+1-kongbai);
+					right(di3);
+					prev.classList.remove('active');
+					this.classList.add('active');
+					prev = this;
+				};
+			}
+		}
+
+		function time(){
+			let dr2 = new Date;
+			let str2 = toTwo(dr2.getHours()) + ':' + toTwo(dr2.getMinutes()) + ':' + toTwo(dr2.getSeconds());
+			timeBox.innerHTML = str2;
+		}
+
+		//将时间对应到右侧第一行和第二行
+		function right(ddd){
+			const arr = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+			let str1 = ddd.getFullYear() + '-' + toTwo((ddd.getMonth()+1)) + '-' + toTwo(ddd.getDate()) + ' ' + arr[ddd.getDay()];
+			dateBox.innerHTML = str1;
+			todayBox.innerHTML = ddd.getDate();
+            lunarYear.innerHTML = calendar.solar2lunar(ddd.getFullYear(),ddd.getMonth()+1,ddd.getDate()).gzYear;
+            lunarMonth.innerHTML = calendar.solar2lunar(ddd.getFullYear(),ddd.getMonth()+1,ddd.getDate()).IMonthCn;
+            lunarDate.innerHTML = calendar.solar2lunar(ddd.getFullYear(),ddd.getMonth()+1,ddd.getDate()).IDayCn;
+		}
+	</script>
+	</body>
+</html>
