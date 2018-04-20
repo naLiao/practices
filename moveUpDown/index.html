@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<section class="wrap">
+	<div class="wrap-left">
+		<ul class="list">
+			<li>
+				<span>jQuery</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up">上移</a>
+					<a href="javascript:;" class="down">下移</a>
+				</div>
+			</li>
+			<li>
+				<span>AJAX</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up">上移</a>
+					<a href="javascript:;" class="down">下移</a>
+				</div>
+			</li>
+			<li>
+				<span>JS基础-2</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up">上移</a>
+					<a href="javascript:;" class="down">下移</a>
+				</div>
+			</li>
+			<li>
+				<span>移动端实战</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up">上移</a>
+					<a href="javascript:;" class="down">下移</a>
+				</div>
+			</li>
+			<li>
+				<span>canvas游戏</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up">上移</a>
+					<a href="javascript:;" class="down">下移</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="wrap-right">
+		<ul class="list">
+			<li>
+				<span>jQuery</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up"></a>
+					<a href="javascript:;" class="down"></a>
+				</div>
+			</li>
+			<li>
+				<span>小程序</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up"></a>
+					<a href="javascript:;" class="down"></a>
+				</div>
+			</li>
+			<li>
+				<span>jQuery</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up"></a>
+					<a href="javascript:;" class="down"></a>
+				</div>
+			</li>
+			<li>
+				<span>面向对象-上</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up"></a>
+					<a href="javascript:;" class="down"></a>
+				</div>
+			</li>
+			<li>
+				<span>面向对象-下</span>
+				<div class="btn">
+					<a href="javascript:;"  class="up"></a>
+					<a href="javascript:;" class="down"></a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</section>
+<script src="personal.js"></script>
+<script>
+    const ulL = document.querySelector('.wrap-left .list');  //静态获取父级ul
+    const ulR = document.querySelector('.wrap-right .list');  //静态获取父级ul
+
+    clickToMoveUpOrDown(ulL);  //左侧
+    clickToMoveUpOrDown(ulR);  //右侧
+
+    function clickToMoveUpOrDown(parentEle) {
+        const btnsUp = parentEle.getElementsByClassName('up');  //动态获取所有上移按钮
+        const btnsDown = parentEle.getElementsByClassName('down');  //动态获取所有下移按钮
+
+        //对li进行布局转换，并且将所有li的top值存储在一个数组里，该步骤稍微延迟一点，等CSS样式加载完成
+        const arr = [];
+        setTimeout(function(){
+            for(let i=0;i<parentEle.children.length;i++){
+                parentEle.children[i].style.top = parentEle.children[i].offsetTop + 'px';
+                arr.push(parentEle.children[i].offsetTop);
+            }
+            for(let i=0;i<parentEle.children.length;i++){
+                parentEle.children[i].style.position = 'absolute';
+            }
+		},300)
+
+        //点击上移按钮时，将当前li元素上移一格，点击第一个li时将其移动到最后
+        for(let i=0;i<parentEle.children.length;i++){
+            btnsUp[i].onclick = function () {
+                let v = this.parentNode.parentNode;  //找到当前li
+                if(v === parentEle.children[0]){  //如果点击的是第一个li
+                    parentEle.appendChild(v);  //第一步排好li的位置
+                    movePositionBysequence();  //第二步根据新li排列移动位置
+                }else{
+                    parentEle.insertBefore(v,v.previousElementSibling);  //第一步排好li的位置
+                    movePositionBysequence();  //第二步根据新li排列移动位置
+                }
+            }
+        }
+
+        //点击下移按钮时，将当前li元素下移一格，点击最后一个li时将其移动到第一个
+        for(let i=0;i<parentEle.children.length;i++){
+            btnsDown[i].onclick = function () {
+                let v = this.parentNode.parentNode;  //找到当前li
+                if(v === parentEle.lastElementChild){  //如果点击的是最后一个
+                    parentEle.insertBefore(v,parentEle.children[0]);  //第一步排好li的位置
+                    movePositionBysequence();  //第二步根据新li排列移动位置
+                }else{
+                    parentEle.insertBefore(v,v.nextElementSibling.nextElementSibling);  //第一步排好li的位置
+                    movePositionBysequence();  //第二步根据新li排列移动位置
+                }
+            }
+        }
+
+        //根据新排列的li移动位置，因为要加动画效果，所以需要布局转换和移动top值
+        function movePositionBysequence(){
+            for(let i=0;i<parentEle.children.length;i++){
+                parentEle.children[i].style.top = arr[i] + 'px';
+            }
+        }
+    }
+</script>
+</body>
+</html>
