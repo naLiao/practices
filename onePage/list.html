@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		    html,body{
+		    	width: 100%;
+		    	height: 100%;
+		    	margin: 0;
+		    }
+		    body{
+		    	background: url(img/zpbg.png) no-repeat center center;
+		    	background-size: cover;
+		    	display: flex;
+		    }
+		    ul,li{
+		    	margin: 0;
+		    	padding: 0;
+		    	list-style: none;
+		    }
+		    p{
+		    	margin: 0;
+		    }
+		    a{
+		    	text-decoration: none;
+		    	color:#b6bdcf;
+		    }
+		    #content{
+		    	width: 700px;
+		    	height: 460px;
+		    	border-radius: 10px;
+		    	border: 1px solid #30343f;
+		    	margin: auto;
+		    	background: url(img/logo.png) no-repeat 25px 25px #252934;
+		    	box-sizing: border-box;
+		    	padding: 84px 0px 0px 25px;
+		    }
+		    #leftList{
+		    	float: left;
+		    	width: 60px;
+		    	padding-right: 12px;
+		    	height: 100%;
+		    	background: url(img/leftListBg.png) no-repeat right top;
+		    }
+		    #leftList li{
+		    	text-align: right;
+		    	height: 68px;
+		    	padding-top: 12px;
+		    	color: #6a7686;
+		    	font: 10px/18px "微软雅黑";
+		    }
+		    #leftList li span{
+		    	font-size: 12px;
+		    	display: block;
+					cursor: pointer;
+		    }
+		    #leftList .active span{
+		    	color: #ff2c4f;
+		    }
+		    #right{
+		    	width: 600px;
+		    	height: 100%;
+		    	float: left;
+		    }
+		    #rightList li{
+		    	height: 82px;
+		    	width: 100%;
+		    	box-sizing: border-box;
+		    	padding: 20px 25px 20px 30px;
+		    	position: relative;
+		    }
+		    #rightList li:hover{
+		    	background-color: #1e212a;
+		    }
+		    #rightList li:hover .num{
+		    	color: #ff2c4f;
+		    }
+		    #rightList li:hover:before{
+		    	content: "";
+		    	width: 2px;
+		    	height: 54px;
+		    	position: absolute;
+		    	background-color: #ff2c4f;
+		    	left: -3px;
+		    	top: 10px;
+		    }
+		    #rightList li:after{
+		    	content: "";
+		    	width: 543px;
+		    	height: 1px;
+		    	position: absolute;
+		    	bottom: 0px;
+		    	right: 25px;
+		    	background:url(img/lineBg.png) repeat-x;
+		    }
+		    #rightList .num{
+		    	font-size: 30px;
+		    	font-family: arial;
+		    	color:#6a7686;
+		    	float: left;
+		    	width: 36px;
+		    	height: 40px;
+		    	border-right: 1px solid #303642;
+		    }
+		    #rightList .list{
+		    	float: left;
+		    	width: 500px;
+		    	margin-left: 6px;
+		    	font-size: 14px;
+		    	color: #b6bdcf;
+		    	font-family: "微软雅黑";
+		    }
+		    #rightList .list span{
+		    	float: left;
+		    }
+		    
+		    .list>a:nth-of-type(1){
+		    	height: 26px;
+		    	float: none;
+		    	font-size: 14px;
+		    }
+		    .job{
+		    	margin-right: 15px;
+		    }
+		    #rightList .list time{
+		    	float: right;
+		    	color: #606a7a;
+		    }
+		    .list .text{
+		    	float: left;
+		    	width: 430px;
+		    	overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+		    }
+		    .list a{
+		    	float: right;
+		    	font-size: 12px;
+		    }
+		    nav{
+		    	font-size: 0px;
+		    	text-align: center;
+		    }
+		    nav a{
+		    	font: 12px/46px "微软雅黑";
+		    	display: inline-block;
+		    	vertical-align: middle;
+		    	width: 24px;
+                cursor: pointer;
+		    }
+		    nav a.active{
+		    	color: #eb2a4b;
+		    }
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<ul id="leftList">
+				<li class="active"><span>社会招聘</span>society</li>
+				<li><span>校园招聘</span>campus</li>
+			</ul>
+			<div id="right">
+				<ul id="rightList">
+				</ul>
+				<nav id="nav">
+					<a href="javascript:;">&lt;</a>
+					<a class="active" href="javascript:;">1</a>
+					<a href="javascript:;">&gt;</a>
+				</nav>
+			</div>
+		</div>
+<script src="js/data.js"></script>
+<script>
+    /*
+    默认状态为社会招聘，显示第一页的信息
+    点击社会招聘或校园招聘时，根据数据重新生成信息和分页条
+    生成函数没有写在hashFn中，因为不需要hash值变换时都刷新数据，只在初始化、点击校园/社会招聘时刷新数据
+    hashFn中：根据page数值显示对应信息，分页条对应页数加样式
+    */
+    const leftList = document.getElementById('leftList');
+    const rightList = document.getElementById('rightList');
+
+    //初始化时根据hash值显示，没有hash值默认显示社会招聘第一页
+    location.hash = location.hash || '#kind=society&page=1';
+    let obj = hashToObject(location.hash);
+    if(obj.kind=='society'){
+        leftList.children[1].classList.remove('active');
+        leftList.children[0].classList.add('active');
+        generateHtml('sh');
+    }else if(obj.kind=='campus'){
+        leftList.children[0].classList.remove('active');
+        leftList.children[1].classList.add('active');
+        generateHtml('xy');
+    }
+    hashFn();
+
+    //点击社会招聘时，根据数据生成信息数和分页条
+    leftList.children[0].onclick = function () {
+        leftList.children[1].classList.remove('active');
+        this.classList.add('active');
+        rightList.innerHTML = '';
+        generateHtml('sh');
+        location.hash = '#kind=society&page=1';
+    }
+
+    //点击校园招聘时，根据数据生成信息数和分页条
+    leftList.children[1].onclick = function () {
+        leftList.children[0].classList.remove('active');
+        this.classList.add('active');
+        rightList.innerHTML = '';
+        generateHtml('xy');
+        location.hash = '#kind=campus&page=1';
+    }
+
+    window.onhashchange = function () {
+        hashFn();
+    }
+
+    function hashFn() {
+        //根据hash值中的page数值显示对应信息
+        let obj = hashToObject();
+        for(let i=0;i<rightList.children.length;i++){
+            rightList.children[i].style.display = 'none';  //先清空所有信息
+        }
+        for(let i=((obj.page-1)*4);i<((obj.page-1)*4+4);i++){  //根据page值显示信息
+            if(rightList.children[i]){  //如果有才显示
+                rightList.children[i].style.display = 'block';
+            }
+        }
+
+        //根据hash值中的page数值给对应页数加样式
+        for(let i=1;i<nav.children.length-1;i++){
+            nav.children[i].classList.remove('active');  //先清空所有样式
+        }
+        nav.children[obj.page*1].classList.add('active');
+    }
+
+    //生成信息、分页条，显示1-4条信息，给分页条加点击事件
+    function generateHtml(zzz) {
+        //根据招聘种类生成信息，链接中加search部分传递当前点击的是哪条信息数据
+        const arr = data[zzz].text;
+        for(let i=0;i<arr.length;i++){
+            let li = document.createElement('li');
+            let str = `${i+1}&${zzz=='sh'? 'society' : 'campus'}`;
+            li.innerHTML = `
+                <span class="num">${data.add0(i+1)}</span>
+                <div class="list">
+                    <a href="content.html?${str}"><span class="job">职位需求：${arr[i].zw}</span><span>需求人数：${arr[i].rs}名</span><time>${data.formateDate(arr[i].sj)}</time></a>
+                    <p><span class="text">岗位要求：${arr[i].info[0].l.join('')}</span><a href="javascript:;">查看详情>></a></p>
+                </div>
+            `;
+            li.style.display = 'none';
+            rightList.appendChild(li);
+        }
+
+        //显示1-4条信息
+        for(let i=0;i<4;i++){
+            if(rightList.children[i]){
+                rightList.children[i].style.display = 'block';
+            }
+        }
+
+        //根据信息数量生成分页条
+        const nav = document.getElementById('nav');
+        nav.innerHTML = `
+            <a href="javascript:;">&lt;</a>
+            <a class="active" href="javascript:;">1</a>
+            <a href="javascript:;">&gt;</a>`;  //先恢复默认状态
+        let num = rightList.children.length;
+        if(num<=4){
+            nav.style.display = 'none';  //小于等于4条时不用分页显示
+        }else{
+            let pages = Math.ceil(num/4);  //计算总共需要几页显示
+            let num2 = 2;
+            for(let i=0;i<pages-1;i++){  //至少一页，所以第一页已经在html中，从2开始，插入pages-1个即可
+                let a = document.createElement('a');
+                a.innerHTML = num2;
+                num2++;
+                nav.insertBefore(a,nav.lastElementChild);
+            }
+        }
+
+        //给分页条加点击事件：点击页数时，改变hash值中的page值
+        for(let i=1;i<nav.children.length-1;i++){
+            nav.children[i].onclick = function () {
+                let obj = hashToObject();
+                obj.page = i;
+                location.hash = objectToHash(obj);
+            }
+        }
+
+        //给分页条中的<、>加点击事件
+        nav.firstElementChild.onclick = function () {
+            let obj = hashToObject();
+            obj.page = obj.page==1? 1 : obj.page*1-1;
+            location.hash = objectToHash(obj);
+        }
+        nav.lastElementChild.onclick = function () {
+            let obj = hashToObject();
+            let v = nav.lastElementChild.previousElementSibling.innerHTML;
+            obj.page = obj.page==v ? v : obj.page*1+1;
+            location.hash = objectToHash(obj);
+        }
+    }
+
+    //hash值变对象
+    function hashToObject() {
+        let arr = location.hash.substr(1).split('&');  //将目前hash值里的信息变成对象，方便提取数据
+        let obj = {};
+        for(let i=0;i<arr.length;i++){
+            let b = arr[i].split('=')[0];
+            obj[b] = arr[i].split('=')[1];
+        }
+        return obj;
+    }
+
+    //对象变hash值
+    function objectToHash(obj){
+        let str = '#';
+        for (let attr in obj ){
+            str += `${attr}=${obj[attr]}&`;
+        }
+        str = str.substr(0,str.length-1);
+        return str;
+    }
+</script>
+</body>
+</html>

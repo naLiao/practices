@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		    html,body{
+		    	width: 100%;
+		    	height: 100%;
+		    	margin: 0;
+		    }
+		    body{
+		    	background: url(img/zpbg.png) no-repeat center center;
+		    	background-size: cover;
+		    	display: flex;
+		    	color:#b6bdcf;
+		    }
+		    ul,li{
+		    	margin: 0;
+		    	padding: 0;
+		    	list-style: none;
+		    }
+		    dl,dd{
+		    	margin: 0;
+		    	padding: 0;
+		    }
+		    p{
+		    	margin: 0;
+		    }
+		    a{
+		    	text-decoration: none;
+		    	color:#b6bdcf;
+		    }
+		    #content{
+		    	width: 650px;
+		    	height: 460px;
+		    	border-radius: 10px;
+		    	border: 1px solid #30343f;
+		    	margin: auto;
+		    	background: url(img/logo.png) no-repeat 25px 25px #252934;
+		    	box-sizing: border-box;
+		    	padding: 84px 25px 0px;
+		    	position: relative;
+		    }
+		    #rightTop{
+		    	position: absolute;
+		    	right: 0;
+		    	top: 0;
+		    	width: 285px;
+		    }
+		    #rightTop a{
+		    	float: left;
+		    	line-height: 80px;
+		    	margin-right: 34px;
+		    	font-size: 14px;
+		    }
+		    #rightTop a:nth-of-type(2){
+		    	border: 1px solid #ff2c4f;
+		    	border-radius: 28px;
+		    	width: 110px;
+		    	height: 28px;
+		    	text-align: center;
+		    	color: #ff2c4f;
+		    	line-height: 28px;
+		    	margin-top: 23px;
+		    }
+		    #rightTop a:nth-of-type(1):hover{
+		    	color:#ff2c4f;
+		    }
+		    #rightTop a:nth-of-type(2):hover{
+		    	background-color: #ff2c4f;
+		    	color: #000;
+		    }
+		    #title{
+		    	border-bottom: 1px dashed #303642;
+		    	height: 77px;
+		    }
+		    #title p{
+		    	font: 24px/38px "微软雅黑";
+		    }
+		    .simple{
+		    	font: 14px/30px "微软雅黑";
+		    }
+		    .simple span{
+		    	width: 20px;
+		    	display: inline-block;
+		    	text-align: center;	
+		    }
+		    .simple time{
+		    	color: #5c6675;
+		    	float: right;
+		    	width: 100px;
+		    	font: 12px/30px "微软雅黑";
+		    }
+		    #content dl{
+		    	margin-top: 13px;
+		    }
+		    #content dt{
+		    	font: 16px/27px "微软雅黑";
+		    }
+		    #content dd{
+		    	font: 14px/25px "微软雅黑";
+		    	color: #677282;
+		    }
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<div id="rightTop">
+				<a href="javascript:;" class="goback" onclick=back() >&lt;&nbsp;返回招聘列表</a>
+				<a href="javascript:;">投个简历</a>
+			</div>
+			<div id="title">
+			</div>
+			<div id="bottom">
+                 <dl>
+                    <dt>岗位要求：</dt>
+                </dl>
+            </div>
+		</div>
+<script src="js/data.js"></script>
+<script>
+    const title = document.getElementById('title');
+    const dl = document.getElementsByTagName('dl')[0];
+
+    //根据search值获取数据，存储在数组中
+    let arrSearch = location.search.substr(1).split('&');
+    let num = arrSearch[0]*1-1;
+    let zzz = arrSearch[1];
+    var arr = [];
+    if(zzz=='society'){
+        arr = data['sh'].text;
+    }else{
+        arr = data['xy'].text;
+    }
+
+    //生成标题部分
+    title.innerHTML = `
+        <p>${arr[num].zw}</p>
+        <div class="simple">${arr[num].dy}<span>/</span>${arr[num].dd}<span>/</span>${arr[num].jy}<span>/</span>${arr[num].xl}<span>/</span>${arr[num].rs}名 <time>${data.formateDate(arr[num].sj,1)}</time></div>
+    `;
+
+    //生成岗位要求
+    for(let i=0;i<arr[num].info[0].l.length;i++){
+        let dd = document.createElement('dd');
+        dd.innerHTML = arr[num].info[0].l[i];
+        dl.appendChild(dd);
+    }
+
+    //点击返回招聘列表
+    function back() {
+        history.go(-1);
+    }
+</script>
+</body>
+</html>
