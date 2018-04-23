@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+		}
+		#wrap {
+			width: 700px;
+			height: 500px;
+			margin: 30px auto;
+			background: url(img/warp.png) no-repeat;
+			position: relative;
+		}
+		#files {
+			position: absolute;
+			left: 148px;
+			width:420px;
+			top: 200px;
+			/*overflow: auto;*/
+		}
+		.add {
+			width: 132px;
+			height: 47px;
+			display: inline-block;
+			text-decoration: none;
+			background: url(img/addBefore.png) no-repeat;
+			background-size: cover;
+			position: absolute;
+			left: 290px;
+			bottom: 102px;
+		}
+		.del{
+			width: 132px;
+			height: 48px;
+			display: inline-block;
+			text-decoration: none;
+			background: url(img/add.png) no-repeat;
+			position: absolute;
+			left: 295px;
+			bottom: 50px;
+		}
+		.file{
+			width: 116px;
+			height: 118px;
+			border: 2px solid rgba(0,0,0,0);
+			position: relative;
+			border-radius: 10%;
+			float: left;
+			margin-right: 10px;
+			
+		}
+		.fileActive{
+			border-color:#b5a3c2 ;
+			background:#6f5872 ;
+		}
+		.file .ico{
+			margin: 20px auto 0;
+			width:70px;
+			height: 57px;
+			background: url(img/folder.png) no-repeat;
+			background-size: cover;
+		}
+		.file .check{
+			position: absolute;
+			left: 0;
+			top: 0;
+			display: none;
+		}
+		.fileActive .check{
+			display: block;
+		}
+		.file span{
+			display: block;
+			font: 16px/34px "微软雅黑";
+			text-align: center;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			color: #fff;
+			
+		}
+		.file .text{
+			position: absolute;
+			left: 12px;
+			top: 82px;
+			height: 20px;
+			padding: 1px;
+			display: none;
+			width: 80px;
+			font: 16px/34px "微软雅黑";
+		}
+	</style>
+</head>
+<body>
+	<section id="wrap">
+		<div id="files">
+			<!--<div class="file">-->
+				<!--<div class="ico"></div>-->
+				<!--<input type="checkbox" class="check">-->
+				<!--<span>新建文件夹</span>-->
+				<!--<input type="text" class="text" style="display: none;">-->
+			<!--</div>-->
+		</div>
+		<a href="javascript:;" class="add"></a>
+		<a href="javascript:;" class="del"></a>
+	</section>
+    <script src="personal.js"></script>
+	<script>
+        /*
+        问题：
+        1.创建元素时如果给输入框加autofocus:"autofocus"属性只对第一个文件夹有用，每次命名完成删除该属性也没有
+        现在的解决方法是每次给最新的文件夹里的输入框加聚焦和选中效果
+        */
+		var data=[
+				{
+					id:0,
+					name:"新建文件夹"
+				},
+				{
+					id:1,
+					name:"新建文件夹1"
+				},
+				{
+					id:2,
+					name:"新建文件夹2"
+				}
+			];
+		let fileNames = {};  //让文件名不重复
+		const fileBox = document.getElementById('files');
+		const addNewFolderBtn = document.querySelector('.add');
+        const delFoldersBtn = document.querySelector('.del');
+		let newFolder = null;
+        let num = 1;
+
+		//点击创建文件夹时新建一个节点
+        addNewFolderBtn.onclick = function () {
+            if( fileBox.children.length<3 ) {
+                let divFile = document.createElement('div');
+                divFile.className = 'file';
+                divFile.innerHTML = `
+					<div class="ico"></div>
+					<input type="checkbox" class="check">
+					<span>新建文件夹</span>
+					<input type="text" class="text" onblur="named()" value="新建文件夹" style="display: block;">
+				`;
+            fileBox.appendChild(divFile);
+            newFolder = divFile;
+            divFile.onmouseover = function () {
+                this.classList.add('fileActive');  //移入时加效果
+            }
+            divFile.onmouseout = function () {
+                if(divFile.getElementsByClassName('check')[0].checked){  //移出时如果选中就不变，没选中去除效果
+                    return;
+                }
+                this.classList.remove('fileActive');
+            }
+            fileBox.lastElementChild.getElementsByClassName('text')[0].focus();  //给最新的一个文件夹输入框加聚焦
+            fileBox.lastElementChild.getElementsByClassName('text')[0].select();  //给最新的一个文件夹输入框加文字选中效果
+            }
+        }
+
+        //点击删除时删除所有选中的文件夹
+        delFoldersBtn.onclick = function () {
+            const fileActives = document.getElementsByClassName('fileActive');
+            let len = fileActives.length;
+            for(let i=0;i<len;i++){
+                fileActives[0].remove();
+            }
+        }
+
+        //输入框失去焦点时给文件夹命名
+       function named() {
+			let divName = newFolder.lastElementChild.value || '新建文件夹';
+           newFolder.lastElementChild.style.display = 'none';
+           // newFolder.getElementsByClassName('text')[0].removeAttribute('autofocus');
+			for(let i=0;i<newFolder.children.length;i++){
+                if(newFolder.children[i].nodeName === 'SPAN'){
+                    if(fileNames[divName]){  //如果已经有该名字，后面加数字
+                        divName = divName+num;
+                        num++;
+                    }
+                    newFolder.children[i].innerHTML = divName;
+                    fileNames[divName] = divName;
+                }
+			}
+        }
+	</script>
+</body>
+</html>
