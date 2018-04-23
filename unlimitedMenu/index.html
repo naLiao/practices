@@ -30,12 +30,12 @@
 			}
 			ul{
 				width: 80%;
-				font-size: 20px;
+				font-size: 18px;
 				color: #FFF;
 				transition:500ms;
 			}
 			ul li {
-                width: 500px;
+                /*width: 500px;*/
 				position: relative;
 				padding-left: 10px;
 				margin: 10px 0;
@@ -48,6 +48,7 @@
 				position: absolute;
 				left: 14px;
 				top: 18px;
+                display: none;
 			}
 			ul ul{
 				padding-left: 80px;
@@ -55,16 +56,17 @@
 			}
 			ul li span{
 				display: block;
-				line-height: 32px;
+				line-height: 38px;
 				padding-left: 15px;
 				background: url(image/icon.png) no-repeat left 500px;
 			}
 			ul li span.add{
                 cursor: pointer;
-				background-position: 0px -29px;
+				background-position: 0px -26px;
 			}
 			ul li span.line{
-				background-position: 0px 11px;
+				cursor: pointer;
+				background-position: 0px 14px;
 			}
 		</style>
 		<script>
@@ -153,62 +155,51 @@
 
 		</div>
 		<script>
-			//利用递归生成菜单结构
+			//递归生成菜单结构
             const ul = document.getElementById('ul');
 
-			arr.map( e=>{
-				menuRecru(ul,e);
-			});
-
-            function menuRecru(parentNode,data) {
-
-                //如果有child属性就要再次执行函数，一直到没有child属性为止
-                if(data.child){
-
-                    //后面有子集，给当前标题生成li-span结构，span加上内容和样式
+			;(function menuRecru(parentNode,data) {
+                for(let i=0;i<data.length;i++){
                     let li = document.createElement('li');
-                    let span = document.createElement('span');
-                    span.innerText = data.title;
-                    span.classList.add('add');
-                    li.append(span);
-                    parentNode.append(li);
-
-                    //生成ul，并且将ul置为当前父节点再次执行函数
-                    let ul = document.createElement('ul');
-                    parentNode.append(ul);
-                    data.child.map((e,i)=>{
-                        menuRecru(ul,data.child[i]);
-					})
-                }else{
-
-					//当前父节点没有child属性时，创建不加样式的li-span结构放在父节点下，退出函数
-                    let li = document.createElement('li');
-                    let span = document.createElement('span');
-                    span.innerText = data.title;
-                    li.append(span);
-                    parentNode.append(li);
-                    return;
-				}
-            }
-
-            //对有样式的li加点击事件
-            const spans = document.getElementsByClassName('add');
-            for(let i=0;i<spans.length;i++){
-                spans[i].onclick = function () {
-                    let next = this.parentNode.nextElementSibling;
-                    //展开时，要收起
-                    if(this.classList.contains('line')){
-                        this.classList.remove('line');
-                        this.classList.add('add');
-                        next.style.display = 'none';
-                        return;
+                    let h2 = document.createElement('h2');
+                    li.appendChild(h2);
+                    h2.innerHTML = `${data[i].title}`;
+                    if(data[i].child){
+                        let ul = document.createElement('ul');
+                        menuRecru(ul,data[i].child);
+                        h2.innerHTML = `<span class="add">${data[i].title}</span><div style="display: none"></div>`;
+                        li.appendChild(ul);
                     }
-                    //收起时，要展开
-                    this.classList.remove('add');
-                    this.classList.add('line');
-                    //将当前节点的下一节点显示（title下面肯定是child）
-                    next.style.display = 'block';
+                    parentNode.append(li);
                 }
+            })(ul,arr);
+
+            //给有子集的h2加点击事件：点击h2时收起所有子集ul，显示当前ul
+            const h2 = document.getElementsByTagName('h2');
+            for(let i=0;i<h2.length;i++){
+                    h2[i].onclick = function () {
+                        const ulNow = this.nextElementSibling;
+                        if(ulNow){  //如果有子集
+                            const uls = this.parentNode.parentNode.getElementsByTagName('ul');
+                            for(let i=0;i<uls.length;i++){
+                                if(uls[i] != ulNow){
+									uls[i].style.display = 'none';
+									uls[i].previousElementSibling.children[0].className = 'add';
+                                }
+                            }
+
+                            // console.log(ulNow.style.display)
+                            if(ulNow.style.display == 'block'){  //当前ul收起
+                                this.children[0].className = 'add';
+                                this.children[1].style.display = 'none';
+                                ulNow.style.display = 'none';
+                            }else{
+                                ulNow.style.display = 'block';//当前ul显示
+                                this.children[0].className = 'line';
+                                this.children[1].style.display = 'block';
+                            }
+                        }
+                    }
             }
 		</script>
 	</body>
