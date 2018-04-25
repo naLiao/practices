@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        li{
+            list-style: none;
+        }
+        ul{
+            border: 2px solid #000;
+            display: flex;
+        }
+        ul li{
+            width: 80px;
+            height: 80px;
+            background: skyblue;
+            margin: 5px;
+            transition: 300ms;
+        }
+    </style>
+</head>
+<body>
+    <ul id="box">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <script>
+    box.addEventListener('click',fn);
+    let top0 = true;
+
+    function fn(ev) {
+
+        if(ev.target.tagName == 'LI'){
+            if(top0){  //从上往下移
+
+
+                ;(function recruion(ele){
+                    ele.style.transform = 'translateY(300px)';
+                    if(ele.previousElementSibling){
+                        setTimeout(function () {
+                            recruion(ele.previousElementSibling);
+                        },50)
+                    }
+                })(ev.target);
+
+                ;(function recruion(ele){
+                    ele.style.transform = 'translateY(300px)';
+                    if(ele.nextElementSibling){
+                        setTimeout(function () {
+                            recruion(ele.nextElementSibling);
+                        },50)
+                    }
+                })(ev.target);
+
+
+            }else{
+                ;(function recruion(ele){
+                    ele.style.transform = 'translateY(0)';
+                    if(ele.previousElementSibling){
+                        setTimeout(function () {
+                            recruion(ele.previousElementSibling);
+                        },50)
+                    }
+                })(ev.target);
+
+                ;(function recruion(ele){
+                    ele.style.transform = 'translateY(0)';
+                    if(ele.nextElementSibling){
+                        setTimeout(function () {
+                            recruion(ele.nextElementSibling);
+                        },50)
+                    }
+                })(ev.target);
+            }
+
+            top0 = !top0;
+        }
+    }
+    </script>
+</body>
+</html>
