@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #box{
+            width: 200px;
+            height: 200px;
+            background: pink;
+            position: absolute;
+        }
+    </style>
+</head>
+<body style="height: 3000px;">
+    <div id="box"></div>
+    <script>
+        const box = document.getElementById('box');
+        let topp = 0;
+
+        //盒子自动跟随鼠标移动
+        window.onmousemove = function (ev) {
+            // console.log(ev);
+            box.style.left = ev.pageX - box.clientWidth/2 + 'px'; //pageX、pageY都是到页面顶端距离，滚动时不受影响
+            box.style.top = ev.pageY - box.clientHeight/2 + 'px';  //clientX、clientY都是到可视区距离
+            topp = ev.clientY - box.clientHeight/2;
+        }
+
+        //滚动时盒子跟着鼠标，否则滚动时鼠标不动时盒子会跟随滚动条滚出视线范围
+        window.onscroll = function (ev) {
+            // console.log(topp);
+            box.style.top =  window.pageYOffset + topp + 'px';
+        }
+    </script>
+</body>
+</html>
