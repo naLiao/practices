@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #box{
+            background: rgba(0,0,0,.2);
+            border: 1px dashed peachpuff;
+            position: absolute;
+        }
+    </style>
+</head>
+<body id="body">
+<script>
+    document.onmousedown = function (ev) {
+        let div = document.createElement('div');
+        div.id = 'box';
+        let bX = ev.pageX;
+        let bY = ev.pageY;
+
+        body.appendChild(div);
+        document.onmousemove = function (ev) {
+            div.style.width = Math.abs(ev.pageX - bX) +'px';
+            div.style.height = Math.abs(ev.pageY -bY) + 'px';
+            let l = Math.min(ev.pageX,bX);
+            let t = Math.min(ev.pageY,bY);
+            console.log(l,t);
+            div.style.left = l + 'px';
+            div.style.top = t + 'px';
+        }
+        document.onmouseup = function (ev) {
+            div.remove();
+            document.onmousemove = document.onmouseup = null;
+        }
+    }
+</script>
+</body>
+</html>
