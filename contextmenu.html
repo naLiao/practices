@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        .contextmenu{
+            width: 200px;
+            border: solid 1px #0000FF;
+            display: none;
+            position: absolute;
+        }
+        .contextmenu li{
+            width: 200px;
+            line-height: 30px;
+            text-align: center;
+            background: #DDD;
+            margin: 10px 0;
+        }
+        .contextmenu li:hover{
+            background: #4D4D4D;
+        }
+    </style>
+</head>
+<body>
+<ul class="contextmenu">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+<script>
+    const contextmenu = document.getElementsByClassName('contextmenu')[0];
+
+    window.addEventListener('contextmenu',function (ev) {
+        contextmenu.style.display = 'block';
+        contextmenu.style.top = ev.pageY + 'px';
+        contextmenu.style.left = ev.pageX + 'px';
+        ev.preventDefault();  //阻止默认右键菜单出现
+    })
+
+    contextmenu.onclick = function (ev) {
+        if(ev.target.tagName === 'LI'){
+            console.log(ev.target);
+        }
+        ev.cancelBubble = true;  //阻止冒泡，否则菜单点击会触发window的点击事件，菜单会消失
+    }
+
+    window.onclick = function (ev) {
+        contextmenu.style.display = 'none';
+    }
+</script>
+</body>
+</html>
