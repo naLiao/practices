@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body,div{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        body,html{
+            width: 100%;
+            height: 100%;
+        }
+        #box{
+            width: 447px;
+            height: 245px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            position: relative;
+        }
+        #imgBox{
+            width: 447px;
+            height: 245px;
+            /*overflow: hidden;*/
+            position: relative;
+        }
+        #prev, #next{
+            width: 50px;
+            height: 80px;
+            display: block;
+            font-size: 60px;
+            line-height: 80px;
+            text-align: center;
+            color: #FFF;
+            position: absolute;
+            top: 35%;
+            z-index: 11;
+        }
+        #prev{
+            left: 3%;
+        }
+        #next{
+            right: 3%;
+        }
+        #prev:hover, #next:hover{
+            color: #5F9EA0;
+        }
+        #box img{
+            width: 447px;
+            height: 245px;
+            position: absolute;
+            transition:600ms;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <a id="prev" href="javascript:;"><</a>
+        <div id="imgBox"></div>
+        <a id="next" href="javascript:;">></a>
+    </div>
+    <script>
+        const imgBox = document.getElementById('imgBox');
+        const prev = document.getElementById('prev');
+        const next = document.getElementById('next');
+        let onOff = true;  //true表示可移动，切换过程中改为false
+        let w = imgBox.offsetWidth;
+        let h = imgBox.offsetHeight;
+
+        //初始化
+        let arr = [4,3,2,1];
+        htmlGenerate(arr);
+
+        //鼠标点击
+        next.onclick = function (ev) {
+            if(onOff) nextFn('X',w);  //下一个图片，方向为X轴
+        }
+        prev.onclick = function (ev) {
+            if(onOff) prevFn('X',w);  //上一个图片，方向为X轴
+        }
+
+        //鼠标拖拽
+        imgBox.onmousedown = function (ev) {
+            let bX = ev.pageX;
+            let bY = ev.pageY;
+            document.onmouseup = function (ev) {
+                document.onmouseup = null;
+                let disX = Math.abs(ev.pageX-bX);
+                let disY = Math.abs(ev.pageY-bY);
+                if(disX>disY && disX>50  && onOff){  //水平方向移动的多，且移动了有效距离，再判断左移还是右移
+                    if(ev.pageX>bX){  //鼠标向右滑动了
+                        nextFn('X',w);
+                        return;
+                    }else{
+                        prevFn('X',w);
+                        return;
+                    }
+                }
+                if(disY>disX && disY>50  && onOff){  //竖直方向移动的多，且移动了有效距离，再判断上移还是下移
+                    if(ev.pageY>bY){  //鼠标向下滑动了
+                        nextFn('Y',h);
+                        return;
+                    }else{
+                        prevFn('Y',h);
+                        return;
+                    }
+                }
+            }
+        }
+
+        //键盘按键
+        document.onkeyup = function (ev) {
+            if(ev.keyCode === 39 && onOff){  //向右键
+                nextFn('X',w);  //下一个图片，方向为X轴
+            }
+            if(ev.keyCode === 37  && onOff){  //向左键
+                prevFn('X',w);  //上一个图片，方向为X轴
+            }
+            if(ev.keyCode === 38  && onOff){  //向上键
+                prevFn('Y',h);  //上一个图片，方向为Y轴
+            }
+            if(ev.keyCode === 40  && onOff){  //向下键
+                nextFn('Y',h);  //下一个图片，方向为Y轴
+            }
+        }
+
+        function htmlGenerate(data){  //根据数据生成html结构
+            imgBox.innerHTML = '';
+            data.forEach(e=>{
+                let img = document.createElement('img');
+                img.src =  `./img/${e}.jpg`;
+                img.onmousedown = function (ev) {
+                    ev.preventDefault();  //阻止图片拖拽的默认行为
+                }
+                imgBox.appendChild(img);
+            })
+        }
+
+        function nextFn(dir,distance) {
+            onOff = false;
+            let v = imgBox.lastElementChild;  //把最下面的一个移走
+            v.style.transform = `translate${dir}(${distance}px)`;  //露出倒数第二张
+            setTimeout(function () {
+                v.style.transform = 'none';
+                imgBox.insertBefore(v,imgBox.firstElementChild);  //将当前放到最上面
+                onOff = true;
+            },605);
+        }
+
+        function prevFn(dir,distance) {
+            onOff = false;
+            let v = imgBox.lastElementChild;  //把最下面的一个移走
+            imgBox.insertBefore(imgBox.firstElementChild,v);  //把前一张放在倒数第二张的位置
+            v.style.transform = `translate${dir}(-${distance}px)`;  //露出倒数第二张
+            setTimeout(function () {
+                imgBox.appendChild(imgBox.children[2]);  //把倒数第二张放在最后
+                v.style.transform = 'none';
+                onOff = true;
+            },605);
+        }
+    </script>
+</body>
+</html>
