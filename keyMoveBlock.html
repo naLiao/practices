@@ -4,21 +4,44 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        body,div{
+            margin: 0;
+            padding: 0;
+        }
         #box{
             width: 200px;
-            height: 200px;
+            height: 80px;
             background: hotpink;
+            text-align: center;
+            line-height: 80px;
+            font-size: 20px;
+            color: #FFF;
             position: absolute;
+            bottom: 20px;
+            left: 43%;
+            border-radius:8px;
+        }
+        .ball{
+            width: 60px;
+            height: 60px;
+            border-radius:50%;
+            background: deepskyblue;
+            position: absolute;
+            top: 0;
+            left: 34%;
         }
     </style>
 </head>
 <body>
-    <div id="box"></div>
+    <div id="box">按空格发射</div>
     <script>
         const box = document.getElementById('box');
+
         //第二种运动方式：可以同时向多个方向运动，用动画帧让运动性能更高，需要注意动画帧开启和关闭的位置
         let timer = null;
         let onOff = true;
+        let oldTime = +new Date;
+        console.log(oldTime);
         var obj = {
             left:false,
             top:false,
@@ -27,7 +50,7 @@
         }
 
         window.onkeydown = function (ev) {
-            if(onOff){  //onOff开关打开时才可以开启动画帧
+            if(onOff){  //onOff开关打开时才可以开启动画帧，否则down时会一直开启动画帧
                 timer = requestAnimationFrame(function(){
                     moveByKey();
                 })
@@ -45,47 +68,87 @@
             if(ev.keyCode === 40){  //向下
                 obj.down = true;
             }
+
+            window.onkeyup = function (ev) {  //抬起某个键，obj里对应属性改为false，肯定先down再up，所以up事件可以放在down事件里面
+                if(ev.keyCode === 37){  //向左
+                    obj.left = false;
+                }
+                if(ev.keyCode === 38){  //向上
+                    obj.top = false;
+                }
+                if(ev.keyCode === 39){  //向右
+                    obj.right = false;
+                }
+                if(ev.keyCode === 40){  //向下
+                    obj.down = false;
+                }
+
+                if(ev.keyCode === 32){  //按下空格键时发射小球
+                    let newTime = +new Date;
+                    if(newTime-oldTime>=1000){  //与上次发射小球必须间隔1s以上才能再次发射
+                        let div = document.createElement('div');
+                        div.className = 'ball';
+                        box.appendChild(div);
+                        div.timer = requestAnimationFrame(function(){
+                            moveBall(div);
+                        });
+                        oldTime = newTime;
+                    }
+                }
+
+                //如果四个键都抬起，清除动画帧
+                if(!obj.left && !obj.top && !obj.right && !obj.down){
+                    cancelAnimationFrame(timer);
+                    onOff = true;  //清除当前动画帧后打开onOff开关
+                }
+            }
         }
 
-        window.onkeyup = function (ev) {
-            if(ev.keyCode === 37){  //向左
-                obj.left = false;
-            }
-            if(ev.keyCode === 38){  //向上
-                obj.top = false;
-            }
-            if(ev.keyCode === 39){  //向右
-                obj.right = false;
-            }
-            if(ev.keyCode === 40){  //向下
-                obj.down = false;
-            }
+        function moveBall(div) {
+            div.style.top = div.offsetTop - 5 + 'px';  //每次动画帧小球往上移动5px
 
-            //如果四个键都抬起，清除动画帧
-            if(!obj.left && !obj.top && !obj.right && !obj.down){
-                console.log('清除');
-                cancelAnimationFrame(timer);
-                onOff = true;  //清除当前动画帧后打开onOff开关
+            if(Math.abs(div.offsetTop)>= box.getBoundingClientRect().top + div.offsetHeight){  //小球移出可视区，取消动画帧，删除小球
+                cancelAnimationFrame(div.timer);
+                div.remove();
+            }else{
+                requestAnimationFrame(function(){
+                    moveBall(div);
+                });
             }
         }
 
         function moveByKey() {
             if(obj.left){
-                box.style.left = (box.offsetLeft -5) + 'px';
+                if(box.offsetLeft -2<0){  //不会出左边界
+                    box.style.left = 0 + 'px';
+                }else{
+                    box.style.left = (box.offsetLeft -2) + 'px';
+                }
             }
             if(obj.top){
-                box.style.top = (box.offsetTop -5) + 'px';
+                if(box.offsetTop -2<0){  //不会出上边界
+                    box.style.top = 0;
+                }else{
+                    box.style.top = (box.offsetTop -2) + 'px';
+                }
             }
             if(obj.right){
-                box.style.left = (box.offsetLeft +5) + 'px';
+                if(box.offsetLeft +2 > window.innerWidth-box.offsetWidth){  //不会出右边界
+                    box.style.left = window.innerWidth-box.offsetWidth + 'px';
+                }else{
+                    box.style.left = (box.offsetLeft +2) + 'px';
+                }
             }
-            if(obj.down){
-                box.style.top = (box.offsetTop +5) + 'px';
+            if(obj.down){  //不会出下边界
+                if(box.offsetTop +2 > window.innerHeight - box.offsetHeight){
+                    box.style.top = window.innerHeight - box.offsetHeight + 'px';
+                }else{
+                    box.style.top = (box.offsetTop +2) + 'px';
+                }
             }
-            if(obj.left || obj.top || obj.right || obj.down){
+            if(obj.left || obj.top || obj.right || obj.down){  //四个方向键至少按下一个，才继续动画，否则不继续
                 requestAnimationFrame(moveByKey);
             }
-            // console.log(123);
         }
 
         //第一种运动模式：每次只能一个方向，修复了换方向时停顿问题
