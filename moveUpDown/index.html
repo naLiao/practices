@@ -138,10 +138,12 @@
             }
         }
 
-        //根据新排列的li移动位置，因为要加动画效果，所以需要布局转换和移动top值
+        //根据新排列的li移动位置，因为要加动画效果，所以需要布局转换和移动top值，move移动的话不用加定时器
         function movePositionBysequence(){
             for(let i=0;i<parentEle.children.length;i++){
-                parentEle.children[i].style.top = arr[i] + 'px';
+                setTimeout(function () {
+                    parentEle.children[i].style.top = arr[i] + 'px';
+				},0)
             }
         }
     }
