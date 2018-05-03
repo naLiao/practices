@@ -114,13 +114,8 @@
         for(let i=0;i<parentEle.children.length;i++){
             btnsUp[i].onclick = function () {
                 let v = this.parentNode.parentNode;  //找到当前li
-                if(v === parentEle.children[0]){  //如果点击的是第一个li
-                    parentEle.appendChild(v);  //第一步排好li的位置
-                    movePositionBysequence();  //第二步根据新li排列移动位置
-                }else{
-                    parentEle.insertBefore(v,v.previousElementSibling);  //第一步排好li的位置
-                    movePositionBysequence();  //第二步根据新li排列移动位置
-                }
+                parentEle.insertBefore(v,v.previousElementSibling);  //insertBefore如果第二个参数没有，等同于appendChild
+                movePositionBysequence();
             }
         }
 
