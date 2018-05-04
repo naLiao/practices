@@ -26,7 +26,7 @@
         #imgBox{
             width: 447px;
             height: 245px;
-            /*overflow: hidden;*/
+            overflow: hidden;
             position: relative;
         }
         #prev, #next{
@@ -73,8 +73,7 @@
         let h = imgBox.offsetHeight;
 
         //初始化
-        let arr = [4,3,2,1];
-        htmlGenerate(arr);
+        htmlGenerate();
 
         //鼠标点击
         next.onclick = function (ev) {
@@ -129,9 +128,10 @@
             }
         }
 
-        function htmlGenerate(data){  //根据数据生成html结构
+        function htmlGenerate(){  //根据数据生成html结构
+            let arr = [4,3,2,1];
             imgBox.innerHTML = '';
-            data.forEach(e=>{
+            arr.forEach(e=>{
                 let img = document.createElement('img');
                 img.src =  `./img/${e}.jpg`;
                 img.onmousedown = function (ev) {
@@ -144,8 +144,10 @@
         function nextFn(dir,distance) {
             onOff = false;
             let v = imgBox.lastElementChild;  //把最下面的一个移走
+            v.style.transition = '600ms';
             v.style.transform = `translate${dir}(${distance}px)`;  //露出倒数第二张
             setTimeout(function () {
+                v.style.transition = 'none';
                 v.style.transform = 'none';
                 imgBox.insertBefore(v,imgBox.firstElementChild);  //将当前放到最上面
                 onOff = true;
@@ -156,8 +158,10 @@
             onOff = false;
             let v = imgBox.lastElementChild;  //把最下面的一个移走
             imgBox.insertBefore(imgBox.firstElementChild,v);  //把前一张放在倒数第二张的位置
+            v.style.transition = '600ms';
             v.style.transform = `translate${dir}(-${distance}px)`;  //露出倒数第二张
             setTimeout(function () {
+                v.style.transition = 'none';
                 imgBox.appendChild(imgBox.children[2]);  //把倒数第二张放在最后
                 v.style.transform = 'none';
                 onOff = true;
