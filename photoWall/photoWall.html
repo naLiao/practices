@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body,div,ul{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        button{
+            outline: none;
+            border: none;
+            cursor: pointer;
+        }
+        body,html{
+            width: 100%;
+            height: 100%;
+        }
+        #wrap{
+            width: 660px;
+            height: 435px;
+            top: 15%;
+            left: 25%;
+            position: relative;
+            border: solid 1px lightskyblue;
+        }
+        #photoBox li{
+            width: 200px;
+            height: 125px;
+            margin: 10px;
+            float: left;
+        }
+        #photoBox li.active{
+            border: solid 2px #FFA500;
+        }
+        #photoBox li img{
+            width: 200px;
+            height: 125px;
+        }
+        #randomBtn{
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: orange;
+            line-height: 36px;
+            width: 120px;
+            font-size: 18px;
+            color: #FFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <button id="randomBtn">随机排列</button>
+        <ul id="photoBox">
+        </ul>
+    </div>
+    <script src="personal.js"></script>
+    <script>
+        const photoBox = document.getElementById('photoBox');
+        let arrPosition = [];
+        let zIdx = 0;
+
+        render();
+        const lis = Array.from(photoBox.getElementsByTagName('li'));
+
+        //布局转换
+        lis.forEach(e=>{
+            e.style.left = e.offsetLeft + 'px';
+            e.style.top = e.offsetTop + 'px';
+            arrPosition.push([e.offsetLeft,e.offsetTop]);
+        })
+
+        lis.forEach((e,i)=>{
+            e.style.margin = 0;  //布局转换后要清除margin值，否则会有偏差
+            e.style.position = 'absolute';
+            e.index = i;
+            e.onmousedown = function (ev) {
+                zIdx++;
+                e.style.zIndex = zIdx;  //当前点击的元素在最上层
+                let obj = this;
+                let bX = ev.pageX - e.offsetLeft;
+                let bY = ev.pageY - e.offsetTop;
+                document.onmousemove = function (ev) {
+                    obj.style.left = ev.pageX - bX + 'px';  //拖拽效果
+                    obj.style.top = ev.pageY - bY + 'px';
+
+                    let nLi = nearLi(obj);  //找到距离最近的li，添加样式
+                    lis.forEach(e=>{e.classList.remove('active')});
+                    if(nLi){
+                        nLi.classList.add('active');
+                    }
+                }
+                document.onmouseup = function (ev) {
+                    let nLi = nearLi(obj);
+                    if(nLi) {
+                        nLi.classList.remove('active');
+                        move({ele:obj,attr:{left:arrPosition[nLi.index][0],top:arrPosition[nLi.index][1]}, d:500});
+                        move({ele:nLi, attr:{left:arrPosition[obj.index][0], top:arrPosition[obj.index][1]}, d:500});
+                        [nLi.index,obj.index] = [obj.index,nLi.index];
+                    }else{
+                        move({ele:obj, attr:{left:arrPosition[obj.index][0], top:arrPosition[obj.index][1]}, d:500});
+                    }
+                    document.onmousemove = document.onmouseup = null;
+                }
+                return false;
+            }
+        })
+
+        randomBtn.onclick = function () {
+            let arr = [0,1,2,3,4,5,6,7,8];
+            arr.sort(function (a,b) {
+                return Math.random()-0.5;
+            })
+
+            lis.forEach((e,i)=>{
+                move({
+                    ele:e,
+                    attr:{
+                        left:arrPosition[arr[i]][0],
+                        top:arrPosition[arr[i]][1]
+                    }
+                })
+                e.index = arr[i];
+            })
+        }
+
+        function nearLi(obj) {//找到最近的li
+            let value = 9999;
+            let index = -1;
+            for(let i=0;i<lis.length;i++){
+                if(collision(obj,lis[i]) && obj != lis[i]){  //碰撞到的li中选择，并且不是自身
+                    let dis = distance(obj,lis[i]);
+                    if(dis<value){
+                        value = dis;
+                        index = i;
+                    }
+                }
+            }
+            if(index!= -1){
+                return lis[index];
+            }else{
+                return false;
+            }
+        }
+        
+        function distance(obj1,obj2) {  //计算两个元素左顶点间的距离
+            let disX = Math.abs(obj1.offsetLeft - obj2.offsetLeft);
+            let disY = Math.abs(obj1.offsetTop - obj2.offsetTop);
+            return Math.sqrt(disX*disX + disY*disY);
+        }
+        
+        function render() {
+            let html = '';
+            for(let i=0;i<9;i++){
+                html += `<li>
+                            <img src="./img/${i+1}.jpg" alt="">
+                         </li>`;
+            }
+            photoBox.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
