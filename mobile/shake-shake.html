@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    let oldTime = +new Date;
+    let lastX = 0;
+    let lastY = 0;
+    let lastZ = 0;
+    let RANGE = 50;
+    let isShake = false;
+    window.addEventListener('devicemotion',function (ev) {
+        let nowTime = +new Date;
+        if(nowTime-oldTime<200) return;
+
+        let motion = ev.accelerationIncludingGravity;
+        let range = Math.abs(motion.x-lastX) + Math.abs(motion.y-lastY) + Math.abs(motion.z-lastZ);
+        if(range>RANGE){
+            isShake = true;
+        }else if(range<15 && isShake){
+            alert('刚刚摇一摇了');
+        }
+        lastX = motion.x;
+        lastY = motion.y;
+        lastZ = motion.z;
+        oldTime = nowTime;
+    })
+</script>
+</body>
+</html>
